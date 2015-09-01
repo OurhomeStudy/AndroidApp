@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Project</string>
+    <string name="mapfind">지도검색</string>
+    <string name="catfind">카테고리검색</string>
+    <string name="start">메인화면</string>
+    <string name="action_search">검색</string>
+</resources>
