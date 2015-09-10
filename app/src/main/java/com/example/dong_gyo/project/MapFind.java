@@ -6,13 +6,12 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +24,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -32,19 +32,10 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+
+import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
+
 import java.util.ArrayList;
 
 public class MapFind extends ActionBarActivity {
@@ -61,12 +52,25 @@ public class MapFind extends ActionBarActivity {
     ArrayList arr;
     ArrayAdapter mapadapter;
     android.support.v7.app.ActionBar actionBar;
+    JSONObject sending;
 
     double center_latitude = 0;
     double center_longitude = 0;
 
     final double LATDISTANCE = 0.0045050118256;
     final double LONGDISTANCE = 0.005659725956;
+
+    protected android.os.Handler mHandler =  new android.os.Handler() {
+
+        public void handleMessage(Message msg) {
+            if (msg.what == -1) {
+                //   BreakTimeout();
+                //ConnectionError();
+                System.out.println("handler error");
+            }
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +157,19 @@ public class MapFind extends ActionBarActivity {
                 if(center_latitude != 0) {
                     LatLng now = new LatLng(center_latitude, center_longitude);
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(now, 16));
+
+                    sending = new JSONObject();
+
+                    try {
+                        sending.put("sendUp", Double.toString(center_latitude + LATDISTANCE));
+                        sending.put("sendDown", Double.toString(center_latitude - LATDISTANCE));
+                        sending.put("sendLeft", Double.toString(center_longitude - LONGDISTANCE));
+                        sending.put("sendRight", Double.toString(center_longitude + LONGDISTANCE));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
 
                 }
@@ -342,76 +359,5 @@ public class MapFind extends ActionBarActivity {
         }
 
         return super.onCreateOptionsMenu(menu);
-    }
-
-    class RestaurantList extends AsyncTask<Void, Void, Void> {
-
-        Context mContext;
-        JSONObject _jobj;
-        String result = "";
-        JSONObject receivedJSON;
-        InputStream inputStream;
-        Bitmap bmp;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // TODO Auto-generated method stub
-
-            Task();
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-            JSONObject resultJSON;
-            super.onPostExecute(result);
-        }
-
-        public void Task() {
-
-            HttpClient httpClient = new DefaultHttpClient();
-
-            try {
-                URI _url = null;
-
-                _url = new URI("http://183.96.25.221:1338");
-
-                HttpPost httpPost = new HttpPost(_url);
-                String json = "";
-                json = _jobj.toString();
-                StringEntity se = new StringEntity(json);
-                httpPost.setEntity(se);
-                httpPost.setHeader("Content-Type", "application/json");
-                HttpResponse response = httpClient.execute(httpPost);
-
-
-                BufferedReader bufReader =  new BufferedReader(new InputStreamReader(
-                        response.getEntity().getContent(),"utf-8" )
-                );
-                String line = null;
-
-                while ((line = bufReader.readLine())!=null){
-                    result +=line;
-                }
-
-            }
-            catch(URISyntaxException e) {
-                System.out.println("1");
-                e.printStackTrace();
-            }
-            catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
-                System.out.println("2");
-                e.printStackTrace();
-            }
-
-            catch (IOException e) {
-                System.out.println("3");
-                e.printStackTrace();
-            }
-            return;
-        }
     }
 }
