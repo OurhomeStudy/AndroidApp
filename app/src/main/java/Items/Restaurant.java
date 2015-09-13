@@ -3,7 +3,7 @@ package Items;
 import java.util.ArrayList;
 
 /**
- * Created by Dong_Gyo on 15. 8. 3..
+ * Created by Song on 2015-09-13.
  */
 public class Restaurant {
 
