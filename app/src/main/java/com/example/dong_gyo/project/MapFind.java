@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,12 +35,18 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import Items.Restaurant;
+import Items.RestaurantListAsync;
+
 public class MapFind extends ActionBarActivity {
+
+    private int GET_RESTAURANT_LIST = 1;
 
     GoogleMap mMap; // Might be null if Google Play services APK is not available.
     LocationManager lm;
@@ -60,13 +68,59 @@ public class MapFind extends ActionBarActivity {
     final double LATDISTANCE = 0.0045050118256;
     final double LONGDISTANCE = 0.005659725956;
 
-    protected android.os.Handler mHandler =  new android.os.Handler() {
+    protected Handler mHandler =  new Handler() {
 
+        @Override
         public void handleMessage(Message msg) {
             if (msg.what == -1) {
                 //   BreakTimeout();
                 //ConnectionError();
                 System.out.println("handler error");
+            } else if (msg.what == GET_RESTAURANT_LIST) {
+
+                try {
+
+                    JSONObject jobj = new JSONObject(msg.obj + "");
+                    if(jobj.get("messagetype").equals("searchLocalRestaurant")) {
+
+                        if(jobj.get("result").equals("GET_CONFERENCE_INFO_ERROR")) {
+                            Toast.makeText(getApplicationContext(), "GET_CONFERENCE_INFO_ERROR", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(jobj.get("result").equals("GET_CONFERENCE_INFO_FAIL")) {
+                            Toast.makeText(getApplicationContext(), "GET_CONFERENCE_INFO_FAIL", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(jobj.get("result").equals("GET_CONFERENCE_INFO_SUCCESS")) {
+                            JSONArray sessionJsonArray = new JSONArray(jobj.get("").toString());
+
+                            Restaurant res;
+
+                            ArrayList <Restaurant> reslist = new ArrayList <Restaurant>();
+
+                            for(int i = 0; i < sessionJsonArray.length(); i++) {
+                                JSONObject sessionJsonObj = new JSONObject(sessionJsonArray.get(i).toString());
+                                res = new Restaurant();
+
+                            }
+
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "MESSAGE_TYPE_WRONG", Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if (msg.what == 3) {
+
+                try {
+                    JSONObject jobj = new JSONObject(msg.obj + "");
+                    if(jobj.get("messagetype").equals("temp2")) {
+                        Toast.makeText(getApplicationContext(), jobj.get("content").toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -158,13 +212,14 @@ public class MapFind extends ActionBarActivity {
                     LatLng now = new LatLng(center_latitude, center_longitude);
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(now, 16));
 
-                    sending = new JSONObject();
-
                     try {
-                        sending.put("sendUp", Double.toString(center_latitude + LATDISTANCE));
-                        sending.put("sendDown", Double.toString(center_latitude - LATDISTANCE));
-                        sending.put("sendLeft", Double.toString(center_longitude - LONGDISTANCE));
-                        sending.put("sendRight", Double.toString(center_longitude + LONGDISTANCE));
+                        sending.put("messagetype", "temp2");
+                        //sending.put("sendUp", Double.toString(center_latitude + LATDISTANCE));
+                        //sending.put("sendDown", Double.toString(center_latitude - LATDISTANCE));
+                        //sending.put("sendLeft", Double.toString(center_longitude - LONGDISTANCE));
+                        //sending.put("sendRight", Double.toString(center_longitude + LONGDISTANCE));
+
+                        new RestaurantListAsync (getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, 3, 0);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
