@@ -50,9 +50,7 @@
     </layouts>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d160a16a-caf6-4a1a-bedc-4e49e49ed7b9" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/Items/RestautantListAsync.java" afterPath="" />
-    </list>
+    <list default="true" id="d160a16a-caf6-4a1a-bedc-4e49e49ed7b9" name="Default" comment="" />
     <ignored path="Project.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -82,7 +80,7 @@
       <file leaf-file-name="MapFind.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/MapFind.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4272152">
+            <state vertical-scroll-proportion="-2.1004941">
               <caret line="117" column="123" selection-start-line="117" selection-start-column="123" selection-end-line="117" selection-end-column="123" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -2298,7 +2296,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/MapFind.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4272152">
+        <state vertical-scroll-proportion="-2.1004941">
           <caret line="117" column="123" selection-start-line="117" selection-start-column="123" selection-end-line="117" selection-end-column="123" />
           <folding>
             <element signature="imports" expanded="true" />
