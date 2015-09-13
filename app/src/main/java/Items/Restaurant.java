@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by Dong_Gyo on 15. 8. 3..
  */
-public class Shop {
+public class Restaurant {
 
     private String shopname;
     private String address;
@@ -13,8 +13,12 @@ public class Shop {
     private String category;
     private ArrayList<Menu> menus;
 
-    public Shop (String shopname){
+    public Restaurant(String shopname){
         this.shopname = shopname;
+    }
+
+    public Restaurant() {
+
     }
 
     public void setCategory(String tmp) {
