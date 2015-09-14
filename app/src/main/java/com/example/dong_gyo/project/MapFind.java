@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -31,8 +32,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -57,10 +60,13 @@ public class MapFind extends ActionBarActivity {
     ListView mapList;
     HorizontalScrollView hsv;
     LinearLayout scrl;
-    ArrayList arr;
+    ArrayList listarr;
     ArrayAdapter mapadapter;
     android.support.v7.app.ActionBar actionBar;
     JSONObject sending;
+
+    ArrayList <Restaurant> reslist;
+    ArrayList <Marker> mk;
 
     double center_latitude = 0;
     double center_longitude = 0;
@@ -83,24 +89,71 @@ public class MapFind extends ActionBarActivity {
                     JSONObject jobj = new JSONObject(msg.obj + "");
                     if(jobj.get("messagetype").equals("searchLocalRestaurant")) {
 
-                        if(jobj.get("result").equals("GET_CONFERENCE_INFO_ERROR")) {
-                            Toast.makeText(getApplicationContext(), "GET_CONFERENCE_INFO_ERROR", Toast.LENGTH_SHORT).show();
+                        if(jobj.get("result").equals("GET_RESTAURANT_INFO_ERROR")) {
+                            Toast.makeText(getApplicationContext(), "GET_RESTAURANT_INFO_ERROR", Toast.LENGTH_SHORT).show();
                         }
-                        else if(jobj.get("result").equals("GET_CONFERENCE_INFO_FAIL")) {
-                            Toast.makeText(getApplicationContext(), "GET_CONFERENCE_INFO_FAIL", Toast.LENGTH_SHORT).show();
+                        else if(jobj.get("result").equals("GET_RESTAURANT_INFO_FAIL")) {
+                            Toast.makeText(getApplicationContext(), "GET_RESTAURANT_INFO_FAIL", Toast.LENGTH_SHORT).show();
                         }
-                        else if(jobj.get("result").equals("GET_CONFERENCE_INFO_SUCCESS")) {
-                            JSONArray sessionJsonArray = new JSONArray(jobj.get("").toString());
+                        else if(jobj.get("result").equals("GET_RESTAURANT_INFO_SUCCESS")) {
 
-                            Restaurant res;
+                            reslist = new ArrayList<Restaurant>();
+                            mk = new ArrayList<Marker>();
+                            listarr = new ArrayList();
 
-                            ArrayList <Restaurant> reslist = new ArrayList <Restaurant>();
+                            JSONArray received = (JSONArray) jobj.get("content");
 
-                            for(int i = 0; i < sessionJsonArray.length(); i++) {
-                                JSONObject sessionJsonObj = new JSONObject(sessionJsonArray.get(i).toString());
-                                res = new Restaurant();
+                            for(int i = 0 ; i< received.length(); i++) {
+                                JSONObject temp = (JSONObject) received.get(i);
 
+                                String shop = temp.get("shop_name").toString();
+                                String laddr = temp.get("shop_address_lotnum").toString();
+                                String saddr = temp.get("shop_address_street").toString();
+                                String floor = temp.get("shop_floor").toString();
+                                String telno = temp.get("shop_tel_number").toString();
+                                String category = temp.get("shop_category").toString();
+                                String type = temp.get("shop_type").toString();
+                                String detail = temp.get("shop_details").toString();
+                                String homepg = temp.get("shop_homepage").toString();
+                                String introduct = temp.get("shop_introduct").toString();
+                                String lat = temp.get("shop_latitude").toString();
+                                String lng = temp.get("shop_longitude").toString();
+
+                                Restaurant restmp = new Restaurant(shop, laddr, saddr, floor, telno, category, type, detail, homepg, introduct, lat, lng);
+
+                                LatLng latlngtmp = restmp.getLatlng();
+
+                                Marker mktmp = mMap.addMarker(new MarkerOptions()
+                                        .position(latlngtmp)
+                                        .icon(BitmapDescriptorFactory
+                                                .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                                        .title(restmp.getShopname()));
+
+
+
+                                reslist.add(restmp);
+                                mk.add(mktmp);
+                                listarr.add(reslist.get(reslist.size()-1).getShopname());
+                                mk.get(mk.size()-1).showInfoWindow();
                             }
+
+                            for (int i=0; i<reslist.size(); i++) {
+                                Log.i("레스토랑", reslist.get(i).getShopname());
+                                Log.i("리스트뷰", listarr.get(i).toString());
+                            }
+                            Log.i("레스토랑 갯수", Integer.toString(reslist.size()));
+                            Log.i("마커 갯수", Integer.toString(mk.size()));
+
+                            mapadapter.notifyDataSetChanged();
+
+                           //mapadapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arr);
+
+                            /*
+                            JSONObject index0 = (JSONObject)received.get(0);
+                            System.out.println("received 갯수 : "+received.length());
+                            System.out.println("첫번째 집 이름 : "+index0.get("shop_name").toString());
+                            Toast.makeText(getApplicationContext(),index0.get("shop_name").toString(), Toast.LENGTH_SHORT).show();
+                            */
 
                         }
                     } else {
@@ -131,8 +184,6 @@ public class MapFind extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_find);
 
-        startActivity(new Intent(this, LoadingApp.class));
-
         actionBar = getSupportActionBar();
         actionBar.setTitle("지도로 검색하기");
         actionBar.show();
@@ -146,13 +197,7 @@ public class MapFind extends ActionBarActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
         ArrayList<Button> but = new ArrayList<Button>();
-        arr = new ArrayList();
-        for(int i=0; i<10; i++) {
-            but.add(new Button(this));
-            but.get(i).setText("버튼 " + (i+1));
-            but.get(i).setLayoutParams(params);
-            scrl.addView(but.get(i));
-        }
+        listarr = new ArrayList();
 
         mapListbut = (Button)findViewById(R.id.showMapList);
         mapSearchbut = (Button)findViewById(R.id.findShop);
@@ -160,24 +205,18 @@ public class MapFind extends ActionBarActivity {
         mapList = (ListView)findViewById(R.id.mapList);
         mapList.setVisibility(View.INVISIBLE);
 
-        for(int i=0; i<10; i++) {
-            arr.add("레스토랑 " + (i+1));
-        }
-
-        mapadapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arr);
+        mapadapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listarr);
 
         mapList.setAdapter(mapadapter);
 
         mapList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mapList.getItemAtPosition(position).toString().equals("레스토랑 1")) {
-                    Intent it = new Intent(MapFind.this, ResMain2.class);
-                    startActivity(it);
-                } else {
-                    Bundle resInfo = new Bundle();
-                    Intent it = new Intent(MapFind.this, ResMain.class);
-                    startActivity(it);
+                for(int i=0; i < reslist.size(); i++) {
+                    if (mapList.getItemAtPosition(position).toString().equals(reslist.get(i).getShopname())) {
+                        Intent it = new Intent(MapFind.this, ResMain2.class);
+                        startActivity(it);
+                    }
                 }
             }
         });
@@ -212,14 +251,16 @@ public class MapFind extends ActionBarActivity {
                     LatLng now = new LatLng(center_latitude, center_longitude);
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(now, 16));
 
-                    try {
-                        sending.put("messagetype", "temp2");
-                        //sending.put("sendUp", Double.toString(center_latitude + LATDISTANCE));
-                        //sending.put("sendDown", Double.toString(center_latitude - LATDISTANCE));
-                        //sending.put("sendLeft", Double.toString(center_longitude - LONGDISTANCE));
-                        //sending.put("sendRight", Double.toString(center_longitude + LONGDISTANCE));
+                    sending = new JSONObject();
 
-                        new RestaurantListAsync (getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, 3, 0);
+                    try {
+                        sending.put("messagetype", "searchLocalRestaurant");
+                        sending.put("sendUp", Double.toString(center_latitude + LATDISTANCE));
+                        sending.put("sendDown", Double.toString(center_latitude - LATDISTANCE));
+                        sending.put("sendLeft", Double.toString(center_longitude - LONGDISTANCE));
+                        sending.put("sendRight", Double.toString(center_longitude + LONGDISTANCE));
+
+                        new RestaurantListAsync (getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, GET_RESTAURANT_LIST, 0);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -404,7 +445,6 @@ public class MapFind extends ActionBarActivity {
                 public boolean onQueryTextSubmit(String arg0) {
                     return false;
                 }
-
 
                 @Override
                 public boolean onQueryTextChange(String arg0) {

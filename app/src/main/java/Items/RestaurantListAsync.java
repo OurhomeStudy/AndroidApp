@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Base64;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -113,16 +112,21 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
             URI _url = new URI(urlString);
 
             HttpPost httpPost = new HttpPost(_url);
-
+            /*
             String encodedJSON = Base64.encodeToString(jobj.toString().getBytes(), 0);
             StringEntity entity = new StringEntity(encodedJSON, "UTF-8");
+            */
+            String json = "";
+            json = jobj.toString();
+            StringEntity se = new StringEntity(json);
+            httpPost.setEntity(se);
 
             System.out.println("send : " + jobj.toString());
-            System.out.println("encoded : " + encodedJSON);
+            //System.out.println("encoded : " + encodedJSON);
 
-            entity.setContentType("application/json");
+            se.setContentType("application/json");
 
-            httpPost.setEntity(entity);
+            //httpPost.setEntity(entity);
 
             HttpResponse response = httpClient.execute(httpPost);
             responseString = EntityUtils.toString(response.getEntity(), HTTP.UTF_8);

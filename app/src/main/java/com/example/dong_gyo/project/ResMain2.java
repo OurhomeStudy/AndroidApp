@@ -32,10 +32,11 @@ public class ResMain2 extends ActionBarActivity {
         lam.dispatchCreate(savedInstanceState);
         thost = (TabHost)findViewById(R.id.tabhost);
         thost.setup(lam);
-    /*
-        tsp = thost.newTabSpec("info");
-        thost.addTab(tsp);
-    */
+
+        //tsp = thost.newTabSpec("info").setIndicator("상세정보");
+
+        //thost.addTab(tsp);
+
     }
 
     @Override

@@ -33,11 +33,7 @@
         <activity
             android:name=".MapFind"
             android:label="@string/mapfind">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -81,6 +77,18 @@
 
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+
+        </activity>
+
+        <activity
+            android:name = ".AppStart"
+            android:label = "@string/catfind">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
 

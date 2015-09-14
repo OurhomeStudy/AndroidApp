@@ -17,7 +17,7 @@ public class InfoTab extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.info_tab, null);
+        View view = inflater.inflate(R.layout.tab1, null);
 
         return view;
 
