@@ -97,6 +97,12 @@ public class MapFind extends ActionBarActivity {
                         }
                         else if(jobj.get("result").equals("GET_RESTAURANT_INFO_SUCCESS")) {
 
+                            if (mk != null) {
+                                while (mk.size() != 0) {
+                                    mk.get(0).setVisible(false);
+                                    mk.remove(0);
+                                }
+                            }
                             reslist = new ArrayList<Restaurant>();
                             mk = new ArrayList<Marker>();
                             listarr = new ArrayList();
@@ -144,9 +150,8 @@ public class MapFind extends ActionBarActivity {
                             Log.i("레스토랑 갯수", Integer.toString(reslist.size()));
                             Log.i("마커 갯수", Integer.toString(mk.size()));
 
-                            mapadapter.notifyDataSetChanged();
-
-                           //mapadapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arr);
+                            mapadapter = new ArrayAdapter(MapFind.this, android.R.layout.simple_list_item_1, listarr);
+                            mapList.setAdapter(mapadapter);
 
                             /*
                             JSONObject index0 = (JSONObject)received.get(0);
@@ -205,10 +210,6 @@ public class MapFind extends ActionBarActivity {
         mapList = (ListView)findViewById(R.id.mapList);
         mapList.setVisibility(View.INVISIBLE);
 
-        mapadapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listarr);
-
-        mapList.setAdapter(mapadapter);
-
         mapList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -261,7 +262,6 @@ public class MapFind extends ActionBarActivity {
                         sending.put("sendRight", Double.toString(center_longitude + LONGDISTANCE));
 
                         new RestaurantListAsync (getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, GET_RESTAURANT_LIST, 0);
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

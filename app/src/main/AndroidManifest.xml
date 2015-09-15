@@ -34,7 +34,6 @@
             android:name=".MapFind"
             android:label="@string/mapfind">
 
-
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
 
