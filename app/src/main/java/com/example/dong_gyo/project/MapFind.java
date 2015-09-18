@@ -65,6 +65,7 @@ public class MapFind extends ActionBarActivity {
     android.support.v7.app.ActionBar actionBar;
     JSONObject sending;
 
+
     ArrayList <Restaurant> reslist;
     ArrayList <Marker> mk;
 
@@ -213,12 +214,35 @@ public class MapFind extends ActionBarActivity {
         mapList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for(int i=0; i < reslist.size(); i++) {
+                //listview 클릭리스너
+
+                for(int i=0; i < reslist.size(); i++)
                     if (mapList.getItemAtPosition(position).toString().equals(reslist.get(i).getShopname())) {
+
+                        JSONObject clickedRestaurant = new JSONObject();
+
+                        try {
+                            clickedRestaurant.put("shop_name", reslist.get(i).getShopname());
+                            clickedRestaurant.put("shop_address_lotnum", reslist.get(i).getLAddress());
+                            clickedRestaurant.put("shop_address_street", reslist.get(i).getSAdress());
+                            clickedRestaurant.put("shop_floor", reslist.get(i).getFloor());
+                            clickedRestaurant.put("shop_tel_number", reslist.get(i).getTelno());
+                            clickedRestaurant.put("shop_category", reslist.get(i).getCategory());
+                            clickedRestaurant.put("shop_type", reslist.get(i).getType());
+                            clickedRestaurant.put("shop_details", reslist.get(i).getDetail());
+                            clickedRestaurant.put("shop_homepage", reslist.get(i).getHomepg());
+                            clickedRestaurant.put("shop_introduct", reslist.get(i).getIntroduction());
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                         Intent it = new Intent(MapFind.this, ResMain2.class);
+
+                        it.putExtra("content", clickedRestaurant.toString());
+
                         startActivity(it);
                     }
-                }
             }
         });
 
