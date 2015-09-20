@@ -10,6 +10,13 @@
         android:orientation="horizontal"
         android:background="#00ffff">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="점포 등록"
+            android:gravity="center"
+            android:textSize="50sp"/>
+
     </LinearLayout>
 
 

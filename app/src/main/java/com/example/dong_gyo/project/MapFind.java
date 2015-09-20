@@ -232,6 +232,7 @@ public class MapFind extends ActionBarActivity {
                             clickedRestaurant.put("shop_details", reslist.get(i).getDetail());
                             clickedRestaurant.put("shop_homepage", reslist.get(i).getHomepg());
                             clickedRestaurant.put("shop_introduct", reslist.get(i).getIntroduction());
+                            Log.i("성공!!", clickedRestaurant.toString());
 
                         } catch (JSONException e) {
                             e.printStackTrace();
