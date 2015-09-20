@@ -28,5 +28,14 @@ public class AppStart extends Activity {
                 startActivity(it);
             }
         });
+
+        hostlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent it = new Intent(AppStart.this, AdminLogin.class);
+                startActivity(it);
+            }
+        });
     }
 }

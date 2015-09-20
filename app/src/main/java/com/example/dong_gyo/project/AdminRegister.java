@@ -70,7 +70,7 @@ public class AdminRegister  extends Activity {
                                 Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
                             }
                             else if(owner_id_count > 0){
-                                Toast.makeText(getApplicationContext(), "id°¡ ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "idï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } else {
@@ -116,10 +116,10 @@ public class AdminRegister  extends Activity {
             switch(v.getId()) {
 
                 case R.id.register_id_duplicatecheck_button :
-                    //Áßº¹Ã¼Å© ¹öÆ°ÀÏ °æ¿ì
+                    //ï¿½ßºï¿½Ã¼Å© ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½
                     if(idInputText.getText().toString().equals("")){
-                        //ID ÀÔ·ÂÀÌ ºñ¾úÀ» ¶§
-                        Toast.makeText(getApplicationContext(), "¾ÆÀÌµð¸¦ ÀÔ·ÂÇÏ¼¼¿ä.", Toast.LENGTH_SHORT).show();
+                        //ID ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+                        Toast.makeText(getApplicationContext(), "ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.", Toast.LENGTH_SHORT).show();
                     }
                     else{
 
@@ -135,10 +135,6 @@ public class AdminRegister  extends Activity {
                         new RestaurantListAsync(getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, ADMIN_ID_DUPLICATE_CHECK, 0);
                     }
                     break;
-
-
-
-
 
             }
         }
