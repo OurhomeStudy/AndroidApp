@@ -1,6 +1,7 @@
 package com.example.dong_gyo.project;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -108,23 +109,25 @@ public class AdminLogin extends Activity {
             switch(v.getId()) {
 
                 case R.id.login_register_button :
-                    //register ë²„íŠ¼ì¼ ê²½ìš°
+                    //register ¹öÆ°ÀÏ °æ¿ì
+
+                    Intent it = new Intent(AdminLogin.this, AdminRegister.class);
+                    startActivity(it);
                     break;
 
                 case R.id.login_login_button :
-                    //login ë²„íŠ¼ì¼ ê²½ìš°
-
+                    //login ¹öÆ°ÀÏ °æ¿ì
 
                     if(idInputText.getText().toString().equals("")){
-                        //ID ì…ë ¥ì´ ë¹„ì—ˆì„ ë•Œ
-                        Toast.makeText(getApplicationContext(), "ì•„ì´ë””ë¥¼ ì…ë ¥í•˜ì„¸ìš”.", Toast.LENGTH_SHORT).show();
+                        //ID ÀÔ·ÂÀÌ ºñ¾úÀ» ¶§
+                        Toast.makeText(getApplicationContext(), "¾ÆÀÌµğ¸¦ ÀÔ·ÂÇÏ¼¼¿ä.", Toast.LENGTH_SHORT).show();
                     }
                     else if(pwInputText.getText().toString().equals("")){
-                        Toast.makeText(getApplicationContext(), "ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä.", Toast.LENGTH_SHORT).show();
                     }
 
                     if(!idInputText.getText().toString().equals("") && !pwInputText.getText().toString().equals("")) {
-                        //ë‘˜ë‹¤ ë¹„ì§€ ì•Šì•˜ì„ë•Œ.
+                        //µÑ´Ù ºñÁö ¾Ê¾ÒÀ»¶§.
 
                         String convertedPW = null;
                         try {

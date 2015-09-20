@@ -10,13 +10,6 @@
         android:orientation="horizontal"
         android:background="#00ffff">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="점포 등록"
-            android:gravity="center"
-            android:textSize="50sp"/>
-
     </LinearLayout>
 
 
@@ -67,6 +60,8 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:id="@+id/register_id_edittext"
+                        android:inputType="textPersonName"
                         android:background="#ffffff"
                         android:layout_weight="1"/>
 
@@ -74,6 +69,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="중복검사"
+                        android:id = "@+id/register_id_duplicatecheck_button"
                         android:background="#123456"
                         android:layout_weight="1.5"/>
 
@@ -117,6 +113,9 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:id="@+id/register_pw_edittext"
+                        android:inputType="textPassword"
+                        android:ems="10"
                         android:background="#ffffff"/>
                 </LinearLayout>
 
@@ -174,6 +173,8 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:id="@+id/register_name_edittext"
+                        android:inputType="textPersonName"
                         android:background="#ffffff"/>
                 </LinearLayout>
 
@@ -215,6 +216,8 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:inputType="textPersonName"
+                        android:id="@+id/register_phonenumber_edittext"
                         android:background="#ffffff"/>
                 </LinearLayout>
 
@@ -273,12 +276,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="#ffffff"
+                        android:inputType="textPersonName"
+                        android:id="@+id/register_shop_name_edittext"
                         android:layout_weight="1"/>
 
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="검색"
+                        android:id="@+id/register_shop_name_search_button"
                         android:background="#123456"
                         android:layout_weight="1.5"/>
                 </LinearLayout>
@@ -321,6 +327,8 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:inputType="textPersonName"
+                        android:id="@+id/register_shop_telno_edittext"
                         android:background="#ffffff"/>
                 </LinearLayout>
 
@@ -362,6 +370,8 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:inputType="textPersonName"
+                        android:id="@+id/register_shop_address_edittext"
                         android:background="#ffffff"/>
                 </LinearLayout>
 

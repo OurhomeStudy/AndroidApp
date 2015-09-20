@@ -55,9 +55,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/login_id_edittext"
+                    android:inputType="textPersonName"
                     android:gravity="center"
                     android:layout_weight="1"
-                    android:inputType="textPersonName"/>
+                    />
             </LinearLayout>
 
 
@@ -103,6 +104,8 @@
 
         </LinearLayout>
 
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -147,7 +150,12 @@
                     android:gravity="center"
                     android:id="@+id/login_login_button" />
             </LinearLayout>
+
+
+
+
         </LinearLayout>
+
 
 
         <LinearLayout
