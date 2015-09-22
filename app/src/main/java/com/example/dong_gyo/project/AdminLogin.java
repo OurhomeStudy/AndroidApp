@@ -109,25 +109,25 @@ public class AdminLogin extends Activity {
             switch(v.getId()) {
 
                 case R.id.login_register_button :
-                    //register ¹öÆ°ÀÏ °æ¿ì
+                    //register ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½
 
                     Intent it = new Intent(AdminLogin.this, AdminRegister.class);
                     startActivity(it);
                     break;
 
                 case R.id.login_login_button :
-                    //login ¹öÆ°ÀÏ °æ¿ì
+                    //login ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½
 
                     if(idInputText.getText().toString().equals("")){
-                        //ID ÀÔ·ÂÀÌ ºñ¾úÀ» ¶§
-                        Toast.makeText(getApplicationContext(), "¾ÆÀÌµð¸¦ ÀÔ·ÂÇÏ¼¼¿ä.", Toast.LENGTH_SHORT).show();
+                        //ID ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+                        Toast.makeText(getApplicationContext(), "enter id.", Toast.LENGTH_SHORT).show();
                     }
                     else if(pwInputText.getText().toString().equals("")){
-                        Toast.makeText(getApplicationContext(), "ºñ¹Ð¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "enter password.", Toast.LENGTH_SHORT).show();
                     }
 
                     if(!idInputText.getText().toString().equals("") && !pwInputText.getText().toString().equals("")) {
-                        //µÑ´Ù ºñÁö ¾Ê¾ÒÀ»¶§.
+                        //ï¿½Ñ´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½.
 
                         String convertedPW = null;
                         try {

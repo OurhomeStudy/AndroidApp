@@ -118,7 +118,7 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
             */
             String json = "";
             json = jobj.toString();
-            StringEntity se = new StringEntity(json);
+            StringEntity se = new StringEntity(json, "UTF-8");
             httpPost.setEntity(se);
 
             System.out.println("send : " + jobj.toString());
