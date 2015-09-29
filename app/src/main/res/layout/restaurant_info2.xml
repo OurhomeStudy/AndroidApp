@@ -218,7 +218,7 @@
 
                     </ScrollView>
 
-                    <LinearLayout
+                    <ScrollView
                         android:id="@+id/tab3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -228,42 +228,56 @@
                             android:layout_height="match_parent"
                             android:orientation="vertical">
 
-                            <ScrollView
+                            <ListView
+                                android:id="@+id/reviewlist"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="4">
+                                android:layout_height="wrap_content">
+
+                            </ListView>
+
+                            <LinearLayout
+                                android:padding="5dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#00ffff"
+                                android:orientation="vertical">
+
+
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"></LinearLayout>
+                                    android:layout_height="100dp">
 
-                            </ScrollView>
+                                    <EditText
+                                        android:id="@+id/reviewtext"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="#ffffff"
+                                        android:textSize="15sp"
+                                        android:padding="3dp"
+                                        android:gravity="top"/>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:layout_weight="1">
+                                </LinearLayout>
 
-                                <Button
+                                <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:text="리뷰작성"
-                                    android:textSize="20sp"
-                                    android:layout_weight="1"/>
+                                    android:layout_height="wrap_content">
 
-                                <Button
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:textSize="20sp"
-                                    android:text="버튼"
-                                    android:layout_weight="1"/>
+                                    <Button
+                                        android:id="@+id/reviewbut"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center|right"
+                                        android:text="리뷰 등록"
+                                        android:textSize="20sp"/>
+
+                                </LinearLayout>
 
                             </LinearLayout>
 
                         </LinearLayout>
 
-                    </LinearLayout>
+                    </ScrollView>
 
                 </FrameLayout>
 

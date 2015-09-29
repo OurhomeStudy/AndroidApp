@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -134,6 +137,23 @@ public class ResMain2 extends ActionBarActivity {
 
         tsp = thost.newTabSpec("info3").setIndicator("리뷰보기").setContent(R.id.tab3);
         thost.addTab(tsp);
+
+        ListView reviewlist = (ListView)findViewById(R.id.reviewlist);
+        Button reviewbut = (Button)findViewById(R.id.reviewbut);
+        final EditText reviewtxt = (EditText)findViewById(R.id.reviewtext);
+
+        reviewbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String review = reviewtxt.getText().toString();
+
+                if(review != "" || review != " ") {
+
+                }
+            }
+        });
+
 
     }
 

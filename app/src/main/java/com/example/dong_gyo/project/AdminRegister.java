@@ -50,7 +50,7 @@ public class AdminRegister  extends Activity {
 
     ButtonListener listener;
 
-    Intent intent;
+    String tempSavedId = null;
 
     private int ADMIN_ID_DUPLICATE_CHECK =1;
     private int ADMIN_SHOP_NAME_SEARCH =2;
@@ -88,6 +88,7 @@ public class AdminRegister  extends Activity {
                             owner_id_count = Integer.valueOf(temp.get("owner_id_count").toString());
 
                             if(owner_id_count == 0) {
+                                tempSavedId = idInputText.getText().toString();
                                 idCheckFlag = true;
                                 Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
                             }
@@ -176,30 +177,28 @@ public class AdminRegister  extends Activity {
                 try {
 
                     JSONObject jobj = new JSONObject(msg.obj + "");
-                    if(jobj.get("messagetype").equals("")) {
+                    if(jobj.get("messagetype").equals("adminregisterdone")) {
 
-                        if(jobj.get("result").equals("")) {
-                            Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
+                        if(jobj.get("result").equals("ADMIN_REGISTER_DONE_ERROR")) {
+                            Toast.makeText(getApplicationContext(), "ADMIN_REGISTER_DONE_ERROR", Toast.LENGTH_SHORT).show();
                         }
-                        else if(jobj.get("result").equals("")) {
-                            Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
+                        else if(jobj.get("result").equals("ADMIN_REGISTER_DONE_FAIL")) {
+                            Toast.makeText(getApplicationContext(), "ADMIN_REGISTER_DONE_FAIL", Toast.LENGTH_SHORT).show();
                         }
-                        else if(jobj.get("result").equals("")) {
+                        else if(jobj.get("result").equals("ADMIN_REGISTER_DONE_SUCESS")) {
+
+                            //register done button 이 정상적으로 실행됬을 때.
 
                             if(jobj.get("content").toString().equals("")){
 
-                                Toast.makeText(getApplicationContext(), " failed", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "register sucess", Toast.LENGTH_SHORT).show();
 
 
 
                             }
                             else{
                                 JSONArray received = (JSONArray) jobj.get("content");
-
-
-
                             }
-
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "MESSAGE_TYPE_WRONG", Toast.LENGTH_SHORT).show();
@@ -207,7 +206,6 @@ public class AdminRegister  extends Activity {
                 } catch(JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     };
@@ -308,6 +306,33 @@ public class AdminRegister  extends Activity {
                     break;
                 case R.id.register_done_button:
                     // 빈칸이 존재하면 빈칸 있다고 말해줌.
+
+                    if(idCheckFlag == false || !tempSavedId.equals(idInputText.getText().toString())){
+                        //idcheckFlag 가 false거나 인증 받은 후에 id를 바꿨으면 다시 인증해야됨.
+                        Toast.makeText(getApplicationContext(), "check id duplication", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+
+
+                        if(pwInputText.getText().toString().equals("") || ownerNameInputText.getText().toString().equals("")
+                                || ownerTelNoInputText.getText().toString().equals("") || shopNameInputText.getText().toString().equals("")
+                                || shopAddressStreetInputText.getText().toString().equals("") || shopAddressLotnumInputText.getText().toString().equals("")
+                                || shopTelNoInputText.getText().toString().equals("") || shopFloorInputText.getText().toString().equals("")
+                                || shopCategoryInputText.getText().toString().equals("") || shopTypeInputText.getText().toString().equals("")
+                                || shopDetailsInputText.getText().toString().equals("")|| shopHomepageInputText.getText().toString().equals("")
+                                || shopIntroductInputText.getText().toString().equals("")){
+
+                            Toast.makeText(getApplicationContext(), "blank exists.", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else{
+                            //모두 빈칸이 아닐때에 서버에 전달
+
+
+
+
+                        }
+                    }
 
 
 
