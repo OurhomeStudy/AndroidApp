@@ -40,24 +40,11 @@
         </activity>
 
         <activity
-            android:name = ".CategoryFind"
-            android:label = "@string/catfind">
-
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-
-        </activity>
-
-        <activity android:name = ".LoadingApp">
+            android:name = ".LoadingApp">
         </activity>
 
         <activity
-            android:name = ".ResMain"
-            android:label = "@string/catfind">
-        </activity>
-
-        <activity
-            android:name = ".ResMain2"
+            android:name = ".RestaurantMain"
             android:label = "@string/catfind">
         </activity>
 
@@ -72,24 +59,6 @@
         </activity>
 
         <activity
-            android:name = ".MacroCategory"
-            android:label = "@string/catfind">
-
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-
-        </activity>
-
-        <activity
-            android:name = ".MicroCategory"
-            android:label = "@string/catfind">
-
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-
-        </activity>
-
-        <activity
             android:name = ".AppStart"
             android:label = "@string/catfind">
 
@@ -100,7 +69,7 @@
             </intent-filter>
 
         </activity>
-
+        <!-- aaa -->
     </application>
 
 </manifest>

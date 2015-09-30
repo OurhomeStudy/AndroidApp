@@ -9,7 +9,6 @@
         android:layout_height="match_parent"
         android:id="@+id/loading"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_loading"
-        />
+        android:src="@drawable/loading"/>
 
 </LinearLayout>

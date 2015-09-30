@@ -18,12 +18,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -58,16 +55,13 @@ public class MapFind extends ActionBarActivity {
     Button mapListbut;
     Button mapSearchbut;
     ListView mapList;
-    HorizontalScrollView hsv;
-    LinearLayout scrl;
     ArrayList listarr;
     ArrayAdapter mapadapter;
     android.support.v7.app.ActionBar actionBar;
     JSONObject sending;
 
-
-    ArrayList <Restaurant> reslist;
-    ArrayList <Marker> mk;
+    ArrayList<Restaurant> reslist;
+    ArrayList<Marker> mk;
 
     double center_latitude = 0;
     double center_longitude = 0;
@@ -75,7 +69,7 @@ public class MapFind extends ActionBarActivity {
     final double LATDISTANCE = 0.0045050118256;
     final double LONGDISTANCE = 0.005659725956;
 
-    protected Handler mHandler =  new Handler() {
+    protected Handler mHandler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -88,15 +82,13 @@ public class MapFind extends ActionBarActivity {
                 try {
 
                     JSONObject jobj = new JSONObject(msg.obj + "");
-                    if(jobj.get("messagetype").equals("searchLocalRestaurant")) {
+                    if (jobj.get("messagetype").equals("searchLocalRestaurant")) {
 
-                        if(jobj.get("result").equals("GET_RESTAURANT_INFO_ERROR")) {
+                        if (jobj.get("result").equals("GET_RESTAURANT_INFO_ERROR")) {
                             Toast.makeText(getApplicationContext(), "GET_RESTAURANT_INFO_ERROR", Toast.LENGTH_SHORT).show();
-                        }
-                        else if(jobj.get("result").equals("GET_RESTAURANT_INFO_FAIL")) {
+                        } else if (jobj.get("result").equals("GET_RESTAURANT_INFO_FAIL")) {
                             Toast.makeText(getApplicationContext(), "GET_RESTAURANT_INFO_FAIL", Toast.LENGTH_SHORT).show();
-                        }
-                        else if(jobj.get("result").equals("GET_RESTAURANT_INFO_SUCCESS")) {
+                        } else if (jobj.get("result").equals("GET_RESTAURANT_INFO_SUCCESS")) {
 
                             if (mk != null) {
                                 while (mk.size() != 0) {
@@ -110,7 +102,7 @@ public class MapFind extends ActionBarActivity {
 
                             JSONArray received = (JSONArray) jobj.get("content");
 
-                            for(int i = 0 ; i< received.length(); i++) {
+                            for (int i = 0; i < received.length(); i++) {
                                 JSONObject temp = (JSONObject) received.get(i);
 
                                 String shop = temp.get("shop_name").toString();
@@ -137,14 +129,13 @@ public class MapFind extends ActionBarActivity {
                                         .title(restmp.getShopname()));
 
 
-
                                 reslist.add(restmp);
                                 mk.add(mktmp);
-                                listarr.add(reslist.get(reslist.size()-1).getShopname());
-                                mk.get(mk.size()-1).showInfoWindow();
+                                listarr.add(reslist.get(reslist.size() - 1).getShopname());
+                                mk.get(mk.size() - 1).showInfoWindow();
                             }
 
-                            for (int i=0; i<reslist.size(); i++) {
+                            for (int i = 0; i < reslist.size(); i++) {
                                 Log.i("레스토랑", reslist.get(i).getShopname());
                                 Log.i("리스트뷰", listarr.get(i).toString());
                             }
@@ -166,14 +157,14 @@ public class MapFind extends ActionBarActivity {
                         Toast.makeText(getApplicationContext(), "MESSAGE_TYPE_WRONG", Toast.LENGTH_SHORT).show();
                     }
 
-                } catch(JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             } else if (msg.what == 3) {
 
                 try {
                     JSONObject jobj = new JSONObject(msg.obj + "");
-                    if(jobj.get("messagetype").equals("temp2")) {
+                    if (jobj.get("messagetype").equals("temp2")) {
                         Toast.makeText(getApplicationContext(), jobj.get("content").toString(), Toast.LENGTH_SHORT).show();
                     }
 
@@ -196,19 +187,14 @@ public class MapFind extends ActionBarActivity {
 
         setUpMapIfNeeded();
 
-        hsv = (HorizontalScrollView)findViewById(R.id.mapHori);
-        scrl = (LinearLayout)findViewById(R.id.sclayout);
+        ButtonListener btl = new ButtonListener();
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        ArrayList<Button> but = new ArrayList<Button>();
         listarr = new ArrayList();
 
-        mapListbut = (Button)findViewById(R.id.showMapList);
-        mapSearchbut = (Button)findViewById(R.id.findShop);
+        mapListbut = (Button) findViewById(R.id.showMapList);
+        mapSearchbut = (Button) findViewById(R.id.findShop);
 
-        mapList = (ListView)findViewById(R.id.mapList);
+        mapList = (ListView) findViewById(R.id.mapList);
         mapList.setVisibility(View.INVISIBLE);
 
         mapList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -216,7 +202,7 @@ public class MapFind extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //listview 클릭리스너
 
-                for(int i=0; i < reslist.size(); i++)
+                for (int i = 0; i < reslist.size(); i++)
                     if (mapList.getItemAtPosition(position).toString().equals(reslist.get(i).getShopname())) {
 
                         JSONObject clickedRestaurant = new JSONObject();
@@ -238,7 +224,7 @@ public class MapFind extends ActionBarActivity {
                             e.printStackTrace();
                         }
 
-                        Intent it = new Intent(MapFind.this, ResMain2.class);
+                        Intent it = new Intent(MapFind.this, RestaurantMain.class);
 
                         it.putExtra("content", clickedRestaurant.toString());
 
@@ -250,53 +236,11 @@ public class MapFind extends ActionBarActivity {
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if (mapList.isShown()) {
-                    mapList.setVisibility(View.INVISIBLE);
-                    mapListbut.setSelected(false);
-                }
-            }
-        });
 
-        mapListbut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mapList.isShown()) {
-                    mapList.setVisibility(View.VISIBLE);
-                    mapListbut.setSelected(true);
-                } else if (mapList.isShown()) {
-                    mapList.setVisibility(View.INVISIBLE);
-                    mapListbut.setSelected(false);
-                }
-            }
-        });
-
-        mapSearchbut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(center_latitude != 0) {
-                    LatLng now = new LatLng(center_latitude, center_longitude);
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(now, 16));
-
-                    sending = new JSONObject();
-
-                    try {
-                        sending.put("messagetype", "searchLocalRestaurant");
-                        sending.put("sendUp", Double.toString(center_latitude + LATDISTANCE));
-                        sending.put("sendDown", Double.toString(center_latitude - LATDISTANCE));
-                        sending.put("sendLeft", Double.toString(center_longitude - LONGDISTANCE));
-                        sending.put("sendRight", Double.toString(center_longitude + LONGDISTANCE));
-
-                        new RestaurantListAsync (getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, GET_RESTAURANT_LIST, 0);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
-
-                }
             }
         });
     }
+
 
     @Override
     protected void onResume() {
@@ -308,11 +252,11 @@ public class MapFind extends ActionBarActivity {
      * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
      * installed) and the map has not already been instantiated.. This will ensure that we only ever
      * call {@link #setUpMap(LatLng LOC)} once when {@link #mMap} is not null.
-     * <p/>
+     * <p>
      * If it isn't installed {@link SupportMapFragment} (and
      * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
      * install/update the Google Play services APK on their device.
-     * <p/>
+     * <p>
      * A user can return to this FragmentActivity after following the prompt and correctly
      * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
      * have been completely destroyed during this process (it is likely that it would only be
@@ -326,7 +270,7 @@ public class MapFind extends ActionBarActivity {
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
 
-            lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+            lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
             locationProvider = lm.getBestProvider(new Criteria(), true);
 
@@ -357,7 +301,6 @@ public class MapFind extends ActionBarActivity {
                         });
                 AlertDialog alert = agreeLoc.create();
                 alert.show();
-
 
 
                 latitude = 37.5665;
@@ -432,7 +375,7 @@ public class MapFind extends ActionBarActivity {
     /**
      * This is where we can add markers or lines, add listeners or move the camera. In this case, we
      * just add a marker near Africa.
-     * <p/>
+     * <p>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap(LatLng LOC) {
@@ -462,9 +405,9 @@ public class MapFind extends ActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_activity_actions, menu);
 
-        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
-        if(searchView != null) {
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        if (searchView != null) {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String arg0) {
@@ -479,5 +422,47 @@ public class MapFind extends ActionBarActivity {
         }
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    class ButtonListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            switch(v.getId()) {
+                case R.id.showMapList :
+                    if (!mapList.isShown()) {
+                        mapList.setVisibility(View.VISIBLE);
+                        mapListbut.setSelected(true);
+                        mapListbut.setText("목록 닫기");
+                    } else if (mapList.isShown()) {
+                        mapList.setVisibility(View.INVISIBLE);
+                        mapListbut.setSelected(false);
+                        mapListbut.setText("목록 보기");
+                    } break;
+                case R.id.findShop :
+                    if (center_latitude != 0) {
+                        LatLng now = new LatLng(center_latitude, center_longitude);
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(now, 16));
+
+                        sending = new JSONObject();
+
+                        try {
+                            sending.put("messagetype", "searchLocalRestaurant");
+                            sending.put("sendUp", Double.toString(center_latitude + LATDISTANCE));
+                            sending.put("sendDown", Double.toString(center_latitude - LATDISTANCE));
+                            sending.put("sendLeft", Double.toString(center_longitude - LONGDISTANCE));
+                            sending.put("sendRight", Double.toString(center_longitude + LONGDISTANCE));
+
+                            new RestaurantListAsync(getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, GET_RESTAURANT_LIST, 0);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+
+                    } break;
+            }
+
+        }
     }
 }

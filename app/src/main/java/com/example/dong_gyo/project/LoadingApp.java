@@ -25,4 +25,8 @@ public class LoadingApp extends Activity {
         };
         handler.sendEmptyMessageDelayed(0, 2000);
     }
+
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }
