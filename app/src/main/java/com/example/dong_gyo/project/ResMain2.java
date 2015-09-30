@@ -20,7 +20,12 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import Items.Restaurant;
+import Items.StaticVariable;
 
 /**
  * Created by Dong_Gyo on 15. 8. 27..
@@ -148,10 +153,30 @@ public class ResMain2 extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                String review = reviewtxt.getText().toString();
+                String review_content = reviewtxt.getText().toString();
 
-                if(review != "" || review != " ") {
+                if(review_content != "" || review_content != " ") {
 
+                    JSONObject registerReview = new JSONObject();
+
+                    try {
+                        registerReview.put("messagetype", "review_send");
+                        registerReview.put("review_writer_id", StaticVariable.getUser_id());
+                        registerReview.put("review_writer_name", StaticVariable.getUser_name());
+                        registerReview.put("review_shop_name", restaurant.getShopname());
+                        registerReview.put("review_content", review_content);
+
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+                        String date = dateFormat.format(Calendar.getInstance().getTime());
+
+                        registerReview.put("review_registered_date", date);
+                        registerReview.put("pathStr", "pathStr");
+
+                        Log.i("성공!!", registerReview.toString());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

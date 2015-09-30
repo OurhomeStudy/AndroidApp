@@ -5,7 +5,39 @@ package Items;
  */
 public class StaticVariable {
 
-    public boolean userLogined = false;
+
+    private static boolean userLogined = false;
+    private static String user_id = "123";
+    private static String user_name = "µ¿±³";
+
+
+
+
+    public static boolean isUserLogined() {
+        return userLogined;
+    }
+
+    public static void setUserLogined(boolean userLogined) {
+        StaticVariable.userLogined = userLogined;
+    }
+
+    public static String getUser_id() {
+        return user_id;
+    }
+
+    public static void setUser_id(String user_id) {
+        StaticVariable.user_id = user_id;
+    }
+
+    public static String getUser_name() {
+        return user_name;
+    }
+
+    public static void setUser_name(String user_name) {
+        StaticVariable.user_name = user_name;
+    }
+
+
 
 
 

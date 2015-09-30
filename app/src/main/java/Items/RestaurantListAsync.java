@@ -17,6 +17,8 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -27,9 +29,12 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.security.KeyStore;
 
 /**
@@ -45,6 +50,7 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
     String _url;
     Context mContext;
     JSONObject _jobj;
+
 
     public RestaurantListAsync(Context context, String urls, Handler handler,
                                JSONObject jobj, int hnum, int Data) {
@@ -113,10 +119,32 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
         try {
             if(jobj.get("messagetype").equals("review_send")){
 
+                String pathStr = jobj.get("pathStr").toString();
+                String messagetype = jobj.get("messagetype").toString();
+                String review_writer_id = jobj.get("review_writer_id").toString();
+                String review_writer_name = jobj.get("review_writer_name").toString();
+                String review_shop_name = jobj.get("review_shop_name").toString();
+                String review_content = jobj.get("review_content").toString();
+                String review_registered_date = jobj.get("review_registered_date").toString();
+
                 URI _url = new URI(urlString);
-                HttpPost httpPost = new HttpPost(_url+"/review_picture");
+                HttpPost httpPost = new HttpPost(_url+"/review_send");
 
                 MultipartEntity entity = new MultipartEntity();
+                entity.addPart("messagetype", new StringBody(messagetype, Charset.forName("UTF-8")));
+                entity.addPart("review_writer_id", new StringBody(review_writer_id, Charset.forName("UTF-8")));
+                entity.addPart("review_writer_name", new StringBody(review_writer_name, Charset.forName("UTF-8")));
+                entity.addPart("review_shop_name", new StringBody(review_shop_name, Charset.forName("UTF-8")));
+                entity.addPart("review_content", new StringBody(review_content, Charset.forName("UTF-8")));
+                entity.addPart("review_registered_date", new StringBody(review_registered_date, Charset.forName("UTF-8")));
+
+                File file = new File(pathStr);
+
+                entity.addPart("content", new FileBody(file));
+                httpPost.setEntity(entity);
+
+                httpPost.setHeader("enctype", "multipart/form-data");
+                HttpResponse response = httpClient.execute(httpPost);
             }
             else{
 
@@ -141,36 +169,33 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
                     HttpResponse response = httpClient.execute(httpPost);
                     responseString = EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
                     System.out.println(responseString);
-
                 }
                 catch(URISyntaxException e) {
                     System.out.println("1");
                     e.printStackTrace();
                 }
-
                 catch (ClientProtocolException e) {
                     System.out.println("2");
                     e.printStackTrace();
                 }
-
                 catch (IOException e) {
                     System.out.println("3");
                     e.printStackTrace();
                 }
-
             }
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
             e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-
         return null;
     }
-
-
-
 
 }
 
