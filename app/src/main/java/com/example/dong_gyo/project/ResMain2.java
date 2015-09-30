@@ -3,8 +3,10 @@ package com.example.dong_gyo.project;
 import android.app.LocalActivityManager;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
@@ -153,8 +155,20 @@ public class ResMain2 extends ActionBarActivity {
                 }
             }
         });
+    }
 
 
+
+    public String getImageNameToUri(Uri data){
+        //filepath to Uri string method
+
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(data, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String imgPath = cursor.getString(column_index);
+
+       return imgPath;
     }
 
     @Override

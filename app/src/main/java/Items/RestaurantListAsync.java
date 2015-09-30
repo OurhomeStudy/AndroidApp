@@ -16,6 +16,7 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -23,6 +24,7 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -109,46 +111,67 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
         HttpClient httpClient = getHttpClient();
 
         try {
-            URI _url = new URI(urlString);
+            if(jobj.get("messagetype").equals("review_send")){
 
-            HttpPost httpPost = new HttpPost(_url);
-            /*
-            String encodedJSON = Base64.encodeToString(jobj.toString().getBytes(), 0);
-            StringEntity entity = new StringEntity(encodedJSON, "UTF-8");
-            */
-            String json = "";
-            json = jobj.toString();
-            StringEntity se = new StringEntity(json, "UTF-8");
-            httpPost.setEntity(se);
+                URI _url = new URI(urlString);
+                HttpPost httpPost = new HttpPost(_url+"/review_picture");
 
-            System.out.println("send : " + jobj.toString());
-            //System.out.println("encoded : " + encodedJSON);
+                MultipartEntity entity = new MultipartEntity();
+            }
+            else{
 
-            se.setContentType("application/json");
+                try {
 
-            //httpPost.setEntity(entity);
+                    URI _url = new URI(urlString);
 
-            HttpResponse response = httpClient.execute(httpPost);
-            responseString = EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
-            System.out.println(responseString);
+                    HttpPost httpPost = new HttpPost(_url);
 
-        }
-        catch(URISyntaxException e) {
-            System.out.println("1");
+                    String json = "";
+                    json = jobj.toString();
+                    StringEntity se = new StringEntity(json, "UTF-8");
+                    httpPost.setEntity(se);
+
+                    System.out.println("send : " + jobj.toString());
+                    //System.out.println("encoded : " + encodedJSON);
+
+                    se.setContentType("application/json");
+
+                    //httpPost.setEntity(entity);
+
+                    HttpResponse response = httpClient.execute(httpPost);
+                    responseString = EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
+                    System.out.println(responseString);
+
+                }
+                catch(URISyntaxException e) {
+                    System.out.println("1");
+                    e.printStackTrace();
+                }
+
+                catch (ClientProtocolException e) {
+                    System.out.println("2");
+                    e.printStackTrace();
+                }
+
+                catch (IOException e) {
+                    System.out.println("3");
+                    e.printStackTrace();
+                }
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 
-        catch (ClientProtocolException e) {
-            System.out.println("2");
-            e.printStackTrace();
-        }
-
-        catch (IOException e) {
-            System.out.println("3");
-            e.printStackTrace();
-        }
 
         return null;
     }
 
+
+
+
 }
+
+
