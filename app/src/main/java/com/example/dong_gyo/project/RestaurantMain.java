@@ -22,9 +22,12 @@ import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
+import Customize.ReviewAdapter;
 import Items.Restaurant;
+import Items.Review;
 import Items.StaticVariable;
 
 /**
@@ -45,6 +48,8 @@ public class RestaurantMain extends ActionBarActivity {
     EditText reviewtxt;
 
     Restaurant restaurant;
+    ArrayList<Review> reviews = new ArrayList<Review>();
+    ReviewAdapter revadap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +123,7 @@ public class RestaurantMain extends ActionBarActivity {
         tsp = thost.newTabSpec("info3").setIndicator("리뷰보기").setContent(R.id.tab3);
         thost.addTab(tsp);
 
+        revadap = new ReviewAdapter(this, R.layout.review_shower, reviews);
         reviewlist = (ListView)findViewById(R.id.reviewlist);
         reviewbut = (Button)findViewById(R.id.reviewbut);
         reviewtxt = (EditText)findViewById(R.id.reviewtext);
