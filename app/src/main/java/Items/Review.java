@@ -38,5 +38,4 @@ public class Review {
     public int getReviewstar() {
         return reviewstar;
     }
-
 }
