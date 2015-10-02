@@ -45,6 +45,7 @@ public class RestaurantMain extends ActionBarActivity {
 
     ListView reviewlist;
     Button reviewbut;
+    Button imagebut;
     EditText reviewtxt;
 
     Restaurant restaurant;
@@ -126,6 +127,7 @@ public class RestaurantMain extends ActionBarActivity {
         revadap = new ReviewAdapter(this, R.layout.review_shower, reviews);
         reviewlist = (ListView)findViewById(R.id.reviewlist);
         reviewbut = (Button)findViewById(R.id.reviewbut);
+        imagebut = (Button)findViewById(R.id.imagebut);
         reviewtxt = (EditText)findViewById(R.id.reviewtext);
 
     }
