@@ -59,7 +59,7 @@
         </activity>
 
         <activity
-            android:name = ".AppStart"
+            android:name = ".NavigationMain"
             android:label = "@string/catfind">
 
             <intent-filter>
