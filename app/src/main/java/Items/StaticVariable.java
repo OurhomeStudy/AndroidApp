@@ -8,7 +8,7 @@ public class StaticVariable {
 
     private static boolean userLogined = false;
     private static String user_id = "123";
-    private static String user_name = "µ¿±³";
+    private static String user_name = "temp12312";
 
 
 
