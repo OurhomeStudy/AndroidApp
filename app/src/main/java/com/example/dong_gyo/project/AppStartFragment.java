@@ -1,11 +1,13 @@
 package com.example.dong_gyo.project;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 /**
  * Created by Song on 2015-10-04.
@@ -33,10 +35,35 @@ public class AppStartFragment extends Fragment {
     public AppStartFragment() {
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {   // Fragment 의 layout 을 설정하기 위해서는 onCreateView() 메소드를 사용
         View rootView = inflater.inflate(R.layout.appstart, container, false);
+
+        startActivity(new Intent(getActivity(), LoadingApp.class));
+
+        LinearLayout cuslayout = (LinearLayout)rootView.findViewById(R.id.customer);
+        LinearLayout hostlayout = (LinearLayout)rootView.findViewById(R.id.shophost);
+
+        cuslayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent it = new Intent(getActivity(), MapFind.class);
+                startActivity(it);
+            }
+        });
+
+        hostlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent it = new Intent(getActivity(), AdminLogin.class);
+                startActivity(it);
+            }
+        });
+
         return rootView;
     }
 

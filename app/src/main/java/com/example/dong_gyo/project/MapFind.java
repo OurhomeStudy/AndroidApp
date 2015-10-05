@@ -194,6 +194,9 @@ public class MapFind extends ActionBarActivity {
         mapListbut = (Button) findViewById(R.id.showMapList);
         mapSearchbut = (Button) findViewById(R.id.findShop);
 
+        mapListbut.setOnClickListener(btl);
+        mapSearchbut.setOnClickListener(btl);
+
         mapList = (ListView) findViewById(R.id.mapList);
         mapList.setVisibility(View.INVISIBLE);
 
