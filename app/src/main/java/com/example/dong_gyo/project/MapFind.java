@@ -105,6 +105,7 @@ public class MapFind extends ActionBarActivity {
                             for (int i = 0; i < received.length(); i++) {
                                 JSONObject temp = (JSONObject) received.get(i);
 
+                                int shop_id = temp.getInt("shop_id");
                                 String shop = temp.get("shop_name").toString();
                                 String laddr = temp.get("shop_address_lotnum").toString();
                                 String saddr = temp.get("shop_address_street").toString();
@@ -118,7 +119,7 @@ public class MapFind extends ActionBarActivity {
                                 String lat = temp.get("shop_latitude").toString();
                                 String lng = temp.get("shop_longitude").toString();
 
-                                Restaurant restmp = new Restaurant(shop, laddr, saddr, floor, telno, category, type, detail, homepg, introduct, lat, lng);
+                                Restaurant restmp = new Restaurant(shop_id, shop, laddr, saddr, floor, telno, category, type, detail, homepg, introduct, lat, lng);
 
                                 LatLng latlngtmp = restmp.getLatlng();
 
@@ -211,6 +212,8 @@ public class MapFind extends ActionBarActivity {
                         JSONObject clickedRestaurant = new JSONObject();
 
                         try {
+
+                            clickedRestaurant.put("shop_id", reslist.get(i).getShopid());
                             clickedRestaurant.put("shop_name", reslist.get(i).getShopname());
                             clickedRestaurant.put("shop_address_lotnum", reslist.get(i).getLAddress());
                             clickedRestaurant.put("shop_address_street", reslist.get(i).getSAdress());

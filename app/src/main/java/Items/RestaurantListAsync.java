@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -126,6 +127,7 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
                 String messagetype = jobj.get("messagetype").toString();
                 String review_writer_id = jobj.get("review_writer_id").toString();
                 String review_writer_name = jobj.get("review_writer_name").toString();
+                int review_shop_id = jobj.getInt("review_shop_id");
                 String review_shop_name = jobj.get("review_shop_name").toString();
                 String review_content = jobj.get("review_content").toString();
                 String review_registered_date = jobj.get("review_registered_date").toString();
@@ -137,6 +139,7 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
                 entity.addPart("messagetype", new StringBody(messagetype, Charset.forName("UTF-8")));
                 entity.addPart("review_writer_id", new StringBody(review_writer_id, Charset.forName("UTF-8")));
                 entity.addPart("review_writer_name", new StringBody(review_writer_name, Charset.forName("UTF-8")));
+                entity.addPart("review_shop_id", new StringBody( String.valueOf(review_shop_id), Charset.forName("UTF-8")));
                 entity.addPart("review_shop_name", new StringBody(review_shop_name, Charset.forName("UTF-8")));
                 entity.addPart("review_content", new StringBody(review_content, Charset.forName("UTF-8")));
                 entity.addPart("review_registered_date", new StringBody(review_registered_date, Charset.forName("UTF-8")));
@@ -163,7 +166,6 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
 
 
                     }
-                    //entity.addPart("file_name", (ContentBody) tempPictureNameArr);
                     entity.addPart("file_name", new StringBody(tempPictureNameArr.toString(), Charset.forName("UTF-8")));
                     //filename to JONSArr
 
@@ -190,6 +192,10 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
 
                 httpPost.setHeader("enctype", "multipart/form-data");
                 HttpResponse response = httpClient.execute(httpPost);
+
+                responseString = EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
+
+                System.out.println(responseString);
             }
             else{
 
@@ -201,7 +207,12 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
 
                     String json = "";
                     json = jobj.toString();
-                    StringEntity se = new StringEntity(json, "UTF-8");
+
+                    String encodedJSON = Base64.encodeToString(jobj.toString().getBytes(), 0);
+                    // json to base64 encoding
+
+
+                    StringEntity se = new StringEntity(encodedJSON, "UTF-8");
                     httpPost.setEntity(se);
 
                     System.out.println("send : " + jobj.toString());
@@ -209,10 +220,9 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
 
                     se.setContentType("application/json");
 
-                    //httpPost.setEntity(entity);
-
                     HttpResponse response = httpClient.execute(httpPost);
-                    responseString = EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
+                    responseString =EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
+
                     System.out.println(responseString);
                 }
                 catch(URISyntaxException e) {

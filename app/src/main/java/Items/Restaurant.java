@@ -9,6 +9,9 @@ import java.util.ArrayList;
  */
 public class Restaurant {
 
+
+
+    private int shopid;
     private String shopname;
     private String address_lotnum;
     private String address_street;
@@ -22,8 +25,9 @@ public class Restaurant {
     private String type;
     private String homepg;
 
-    public Restaurant(String shopname, String ladd, String sadd, String floor, String telnum, String category, String type, String detail, String homepage, String introduct, String lat, String lng){
+    public Restaurant(int shopid, String shopname, String ladd, String sadd, String floor, String telnum, String category, String type, String detail, String homepage, String introduct, String lat, String lng){
 
+        setShopid(shopid);
         setShopname(shopname);
         setLAddress(ladd);
         setSAddress(sadd);
@@ -99,5 +103,16 @@ public class Restaurant {
 
     public void setMenus (ArrayList<Menu> tmp) {
         menus = tmp;
+    }
+
+
+
+
+    public int getShopid() {
+        return shopid;
+    }
+
+    public void setShopid(int shopid) {
+        this.shopid = shopid;
     }
 }
