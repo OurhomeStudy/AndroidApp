@@ -213,13 +213,18 @@ public class RestaurantMain extends ActionBarActivity {
             //여기에 이제 review 등록
             try {
 
-                JSONObject temp = (JSONObject) received_review_arr.get(i);
+                JSONObject temp = new JSONObject(received_review_arr.get(i).toString());
 
-                System.out.println(temp.get("shop_name").toString());
 
+                System.out.println(temp.get("review_num").toString());
+                System.out.println(temp.get("user_id").toString());
+                System.out.println(temp.get("content").toString());
+                System.out.println(temp.get("registered_date").toString());
 
 
             } catch (JSONException e) {
+
+
                 e.printStackTrace();
             }
 
