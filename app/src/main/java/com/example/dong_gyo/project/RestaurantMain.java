@@ -218,21 +218,6 @@ public class RestaurantMain extends ActionBarActivity {
         tsp = thost.newTabSpec("info2").setIndicator("사진보긔").setContent(R.id.tab2);
         thost.addTab(tsp);
 
-        thost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-
-            @Override
-            public void onTabChanged(String tabId) {
-
-                int i = thost.getCurrentTab();
-                if (i ==1) {
-
-
-
-                }
-
-            }
-        });
-
         /** --------------------------------- 여기는 리뷰보기 탭임 --------------------------------- **/
 
         tsp = thost.newTabSpec("info3").setIndicator("리뷰보기").setContent(R.id.tab3);
@@ -247,6 +232,19 @@ public class RestaurantMain extends ActionBarActivity {
         imagebut.setOnClickListener(buttonClickListener);
 
 
+        thost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+
+            @Override
+            public void onTabChanged(String tabId) {
+
+                int i = thost.getCurrentTab();
+                if (i == 1) {
+
+
+                }
+
+            }
+        });
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
