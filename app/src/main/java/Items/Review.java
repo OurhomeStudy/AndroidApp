@@ -9,10 +9,9 @@ public class Review {
     private String content;
     private int reviewstar;
 
-    public Review(String name, String content, int reviewstar) {
+    public Review(String name, String content) {
         this.name = name;
         this.content = content;
-        this.reviewstar = reviewstar;
     }
 
     public void setName (String name) {
@@ -23,10 +22,6 @@ public class Review {
         this.content = content;
     }
 
-    public void setReviewstar (int reviewstar) {
-        this.reviewstar = reviewstar;
-    }
-
     public String getName () {
         return name;
     }
@@ -35,7 +30,4 @@ public class Review {
         return content;
     }
 
-    public int getReviewstar() {
-        return reviewstar;
-    }
 }

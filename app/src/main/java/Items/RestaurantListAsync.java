@@ -195,7 +195,7 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
 
                 responseString = EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
 
-                System.out.println(responseString);
+                //System.out.println(responseString);
             }
             else{
 
@@ -223,7 +223,7 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
                     HttpResponse response = httpClient.execute(httpPost);
                     responseString =EntityUtils.toString(response.getEntity(), HTTP.UTF_8);
 
-                    System.out.println(responseString);
+                    //System.out.println(responseString);
                 }
                 catch(URISyntaxException e) {
                     System.out.println("1");

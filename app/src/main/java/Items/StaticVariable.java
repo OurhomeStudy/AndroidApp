@@ -10,10 +10,7 @@ public class StaticVariable {
     private static String user_id = "123";
     private static String user_name = "temp12312";
 
-
     private static String connectUrl = "https://220.72.126.199:15443/";
-
-
 
 
 
@@ -41,11 +38,8 @@ public class StaticVariable {
         StaticVariable.user_name = user_name;
     }
 
-
     public static String getConnectUrl() {
         return connectUrl;
     }
-
-
 
 }

@@ -68,15 +68,16 @@ public class RestaurantMain extends ActionBarActivity {
     ReviewAdapter revadap;
 
     private int REVIEW_REGISTER =1;
-    private int REVIEW_RECEIVE = 2;
+    private int GET_RESTAURANT_REVIEW = 2;
 
     private int SELECT_IMAGE = 11;
 
     ArrayList pathStrArr  =  new ArrayList<String>();
 
     JSONArray received_review_arr = new JSONArray();
-    JSONObject received_picture_str = new JSONObject();
+    JSONArray received_picture_str = new JSONArray();
     JSONArray received_picture_arr = new JSONArray();
+    JSONArray received_picture_iter = new JSONArray();
 
     protected Handler mHandler =  new Handler() {
 
@@ -98,6 +99,61 @@ public class RestaurantMain extends ActionBarActivity {
                         }
                         else if(jobj.get("result").equals("REVIEW_REGISTER_SUCESS")) {
                             Toast.makeText(getApplicationContext(), "REVIEW_REGISTER_SUCESS", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "MESSAGE_TYPE_WRONG", Toast.LENGTH_SHORT).show();
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            else if( msg.what  == GET_RESTAURANT_REVIEW){
+                //review를 받아올 때
+
+                try {
+                    JSONObject jobj = new JSONObject(msg.obj + "");
+                    if(jobj.get("messagetype").equals("searchshopreview")) {
+
+                        if(jobj.get("result").equals("SEARCH_SHOP_REVIEW_ERROR")) {
+                            Toast.makeText(getApplicationContext(), "SEARCH_SHOP_REVIEW_ERROR", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(jobj.get("result").equals("SEARCH_SHOP_REVIEW_FAIL")) {
+                            Toast.makeText(getApplicationContext(), "SEARCH_SHOP_REVIEW_FAIL", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(jobj.get("result").equals("SEARCH_SHOP_REVIEW_SUCCESS")) {
+
+                            if( jobj.get("content").toString().equals("review_exist")){
+                                Toast.makeText(getApplicationContext(), "REVIEW_ONE_MORE", Toast.LENGTH_SHORT).show();
+
+                                received_review_arr = (JSONArray) jobj.get("review_arr");
+                                //리뷰들 받아오기
+                                received_picture_str = (JSONArray) jobj.get("picture_str");
+                                //리뷰의 그림들 받아오기
+
+                                for(int i = 0 ; i < received_review_arr.length(); i++){
+
+                                    //리뷰 정보 가져오기
+                                    JSONObject temp = new JSONObject(received_review_arr.get(i).toString());
+
+                                    String reviewnum = temp.get("review_num").toString();
+                                    String user_id = temp.get("user_id").toString();
+                                    String content = temp.get("content").toString();
+                                    String date = temp.get("registered_date").toString();
+
+                                    reviews.add(new Review(user_id, content));
+
+                                }
+
+
+                                revadap = new ReviewAdapter(RestaurantMain.this, R.layout.review_shower, reviews);
+                                reviewlist.setAdapter(revadap);
+
+
+                            }
+                            else if ( jobj.get("content").toString().equals("review_no_exist")){
+                                Toast.makeText(getApplicationContext(), "REVIEW_NO_RECEIVE", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "MESSAGE_TYPE_WRONG", Toast.LENGTH_SHORT).show();
@@ -135,12 +191,6 @@ public class RestaurantMain extends ActionBarActivity {
             String homepg = receivedRestaurant.get("shop_homepage").toString();
             String introduct = receivedRestaurant.get("shop_introduct").toString();
 
-
-            received_review_arr = receivedRestaurant.getJSONArray("received_review_arr");
-            //리뷰들 받아오기
-            received_picture_str = receivedRestaurant.getJSONObject("received_picture_str");
-            //리뷰의 그림들 받아오기
-            received_picture_arr = (JSONArray) received_picture_str.get("picture_base64_string");
 
 
             restaurant = new Restaurant(shop_id, shop, laddr, saddr, floor, telno, category, type, detail, homepg, introduct, "0", "0");
@@ -199,6 +249,35 @@ public class RestaurantMain extends ActionBarActivity {
         tsp = thost.newTabSpec("info3").setIndicator("리뷰보기").setContent(R.id.tab3);
         thost.addTab(tsp);
 
+
+        thost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+
+            @Override
+            public void onTabChanged(String tabId) {
+
+                int i = thost.getCurrentTab();
+                if (i == 2) {
+
+                    JSONObject get_review_sending = new JSONObject();
+
+                    try {
+                        get_review_sending.put("messagetype", "searchshopreview");
+                        get_review_sending.put("content", restaurant.getShopname());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, get_review_sending, GET_RESTAURANT_REVIEW, 0);
+
+
+
+
+                }
+
+            }
+        });
+
         revadap = new ReviewAdapter(this, R.layout.review_shower, reviews);
         reviewlist = (ListView)findViewById(R.id.reviewlist);
         reviewbut = (Button)findViewById(R.id.reviewbut);
@@ -207,29 +286,26 @@ public class RestaurantMain extends ActionBarActivity {
         imagebut = (Button)findViewById(R.id.imagebut);
         imagebut.setOnClickListener(buttonClickListener);
 
-
-
+        /*
         for(int i = 0 ; i< received_review_arr.length(); i++){
             //여기에 이제 review 등록
             try {
 
                 JSONObject temp = new JSONObject(received_review_arr.get(i).toString());
 
-
                 System.out.println(temp.get("review_num").toString());
                 System.out.println(temp.get("user_id").toString());
                 System.out.println(temp.get("content").toString());
                 System.out.println(temp.get("registered_date").toString());
 
-
             } catch (JSONException e) {
-
 
                 e.printStackTrace();
             }
 
 
         }
+        */
 
     }
 
