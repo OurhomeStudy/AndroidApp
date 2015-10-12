@@ -80,10 +80,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MapFind.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MapFind.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/MapFind.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.76510066">
+            <state vertical-scroll-proportion="0.0">
               <caret line="252" column="10" selection-start-line="252" selection-start-column="10" selection-end-line="252" selection-end-column="10" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -102,13 +102,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RestaurantMain.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="RestaurantMain.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/RestaurantMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="221" column="0" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.5637584">
+              <caret line="226" column="28" selection-start-line="226" selection-start-column="28" selection-end-line="226" selection-end-column="28" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#7781#8015#0" expanded="true" />
+                <element signature="e#8014#8015#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1112,8 +1114,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/AppStartFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/Items/RestaurantListAsync.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/Items/StaticVariable.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/RestaurantMain.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/MapFind.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/RestaurantMain.java" />
       </list>
     </option>
   </component>
@@ -1473,6 +1475,8 @@
           <caret line="238" column="69" selection-start-line="238" selection-start-column="69" selection-end-line="238" selection-end-column="69" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#7781#8015#0" expanded="true" />
+            <element signature="e#8014#8015#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1545,6 +1549,8 @@
           <caret line="353" column="129" selection-start-line="353" selection-start-column="129" selection-end-line="353" selection-end-column="129" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#7781#8015#0" expanded="true" />
+            <element signature="e#8014#8015#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1845,10 +1851,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/RestaurantMain.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/MapFind.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="221" column="0" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
+          <caret line="252" column="10" selection-start-line="252" selection-start-column="10" selection-end-line="252" selection-end-column="10" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1863,12 +1869,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/MapFind.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/dong_gyo/project/RestaurantMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.76510066">
-          <caret line="252" column="10" selection-start-line="252" selection-start-column="10" selection-end-line="252" selection-end-column="10" />
+        <state vertical-scroll-proportion="0.5637584">
+          <caret line="226" column="28" selection-start-line="226" selection-start-column="28" selection-end-line="226" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#7781#8015#0" expanded="true" />
+            <element signature="e#8014#8015#0" expanded="true" />
           </folding>
         </state>
       </provider>
