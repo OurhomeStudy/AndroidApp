@@ -43,10 +43,14 @@ import java.util.ArrayList;
 
 import Items.Restaurant;
 import Items.RestaurantListAsync;
+import Items.StaticVariable;
 
 public class MapFind extends ActionBarActivity {
 
     private int GET_RESTAURANT_LIST = 1;
+    private int GET_RESTAURANT_REVIEW = 2;
+
+    private int clickedFlag= -1;
 
     GoogleMap mMap; // Might be null if Google Play services APK is not available.
     LocationManager lm;
@@ -80,7 +84,6 @@ public class MapFind extends ActionBarActivity {
             } else if (msg.what == GET_RESTAURANT_LIST) {
 
                 try {
-
                     JSONObject jobj = new JSONObject(msg.obj + "");
                     if (jobj.get("messagetype").equals("searchLocalRestaurant")) {
 
@@ -161,19 +164,74 @@ public class MapFind extends ActionBarActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else if (msg.what == 3) {
+            }
+
+            else if( msg.what  == GET_RESTAURANT_REVIEW){
+                //review를 받아올 때
 
                 try {
                     JSONObject jobj = new JSONObject(msg.obj + "");
-                    if (jobj.get("messagetype").equals("temp2")) {
-                        Toast.makeText(getApplicationContext(), jobj.get("content").toString(), Toast.LENGTH_SHORT).show();
-                    }
+                    if(jobj.get("messagetype").equals("searchshopreview")) {
 
-                } catch (JSONException e) {
+                        if(jobj.get("result").equals("SEARCH_SHOP_REVIEW_ERROR")) {
+                            Toast.makeText(getApplicationContext(), "SEARCH_SHOP_REVIEW_ERROR", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(jobj.get("result").equals("SEARCH_SHOP_REVIEW_FAIL")) {
+                            Toast.makeText(getApplicationContext(), "SEARCH_SHOP_REVIEW_FAIL", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(jobj.get("result").equals("SEARCH_SHOP_REVIEW_SUCCESS")) {
+
+
+                            if( jobj.get("content").toString().equals("review_exist")){
+                                Toast.makeText(getApplicationContext(), "REVIEW_ONE_MORE", Toast.LENGTH_SHORT).show();
+
+                                JSONArray received_review_arr = (JSONArray) jobj.get("review_arr");
+                                //리뷰들 받아오기
+                                JSONObject received_picture_str = (JSONObject) jobj.get("picture_str");
+                                //리뷰의 그림들 받아오기
+
+                                //이제 restaurantMain에 받아온 데이터를 넘겨줌
+                                JSONObject clickedRestaurant = new JSONObject();
+                                try {
+
+                                    clickedRestaurant.put("shop_id", reslist.get(clickedFlag).getShopid());
+                                    clickedRestaurant.put("shop_name", reslist.get(clickedFlag).getShopname());
+                                    clickedRestaurant.put("shop_address_lotnum", reslist.get(clickedFlag).getLAddress());
+                                    clickedRestaurant.put("shop_address_street", reslist.get(clickedFlag).getSAdress());
+                                    clickedRestaurant.put("shop_floor", reslist.get(clickedFlag).getFloor());
+                                    clickedRestaurant.put("shop_tel_number", reslist.get(clickedFlag).getTelno());
+                                    clickedRestaurant.put("shop_category", reslist.get(clickedFlag).getCategory());
+                                    clickedRestaurant.put("shop_type", reslist.get(clickedFlag).getType());
+                                    clickedRestaurant.put("shop_details", reslist.get(clickedFlag).getDetail());
+                                    clickedRestaurant.put("shop_homepage", reslist.get(clickedFlag).getHomepg());
+                                    clickedRestaurant.put("shop_introduct", reslist.get(clickedFlag).getIntroduction());
+                                    clickedRestaurant.put("received_picture_str", received_picture_str);
+                                    clickedRestaurant.put("received_review_arr", received_review_arr);
+
+                                    Log.i("성공!!", clickedRestaurant.toString());
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                Intent it = new Intent(MapFind.this, RestaurantMain.class);
+
+                                it.putExtra("content", clickedRestaurant.toString());
+
+                                startActivity(it);
+
+                            }
+                            else if ( jobj.get("content").toString().equals("review_no_exist")){
+                                Toast.makeText(getApplicationContext(), "REVIEW_NO_RECEIVE", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "MESSAGE_TYPE_WRONG", Toast.LENGTH_SHORT).show();
+                    }
+                } catch(JSONException e) {
                     e.printStackTrace();
                 }
             }
-
         }
     };
 
@@ -205,37 +263,24 @@ public class MapFind extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //listview 클릭리스너
-
-                for (int i = 0; i < reslist.size(); i++)
+                for (int i = 0; i < reslist.size(); i++) {
                     if (mapList.getItemAtPosition(position).toString().equals(reslist.get(i).getShopname())) {
 
-                        JSONObject clickedRestaurant = new JSONObject();
-
-                        try {
-
-                            clickedRestaurant.put("shop_id", reslist.get(i).getShopid());
-                            clickedRestaurant.put("shop_name", reslist.get(i).getShopname());
-                            clickedRestaurant.put("shop_address_lotnum", reslist.get(i).getLAddress());
-                            clickedRestaurant.put("shop_address_street", reslist.get(i).getSAdress());
-                            clickedRestaurant.put("shop_floor", reslist.get(i).getFloor());
-                            clickedRestaurant.put("shop_tel_number", reslist.get(i).getTelno());
-                            clickedRestaurant.put("shop_category", reslist.get(i).getCategory());
-                            clickedRestaurant.put("shop_type", reslist.get(i).getType());
-                            clickedRestaurant.put("shop_details", reslist.get(i).getDetail());
-                            clickedRestaurant.put("shop_homepage", reslist.get(i).getHomepg());
-                            clickedRestaurant.put("shop_introduct", reslist.get(i).getIntroduction());
-                            Log.i("성공!!", clickedRestaurant.toString());
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        Intent it = new Intent(MapFind.this, RestaurantMain.class);
-
-                        it.putExtra("content", clickedRestaurant.toString());
-
-                        startActivity(it);
+                        clickedFlag = i;
+                        break;
                     }
+                }
+                JSONObject reviewReceive = new JSONObject();
+
+                try {
+                    reviewReceive.put("messagetype", "searchshopreview");
+                    reviewReceive.put("content", reslist.get(clickedFlag).getShopname());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, reviewReceive, GET_RESTAURANT_REVIEW, 0);
+
             }
         });
 
@@ -459,7 +504,7 @@ public class MapFind extends ActionBarActivity {
                             sending.put("sendLeft", Double.toString(center_longitude - LONGDISTANCE));
                             sending.put("sendRight", Double.toString(center_longitude + LONGDISTANCE));
 
-                            new RestaurantListAsync(getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, GET_RESTAURANT_LIST, 0);
+                            new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, sending, GET_RESTAURANT_LIST, 0);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
