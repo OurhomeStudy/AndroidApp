@@ -51,7 +51,7 @@ public class ReviewAdapter extends BaseAdapter {
             convertView = inflater.inflate(layout, parent, false);
 
             TextView userid = (TextView)convertView.findViewById(R.id.reviewid);
-            TextView reviewtext = (TextView)convertView.findViewById(R.id.reviewtext);
+            TextView reviewtext = (TextView)convertView.findViewById(R.id.reviewcontent);
 
             userid.setText(reviews.get(position).getName());
             reviewtext.setText(reviews.get(position).getContent());

@@ -103,53 +103,56 @@ public class MapFind extends ActionBarActivity {
                             mk = new ArrayList<Marker>();
                             listarr = new ArrayList();
 
-                            JSONArray received = (JSONArray) jobj.get("content");
+                            if(!jobj.get("content").toString().equals("")) {
 
-                            for (int i = 0; i < received.length(); i++) {
-                                JSONObject temp = (JSONObject) received.get(i);
+                                JSONArray received = (JSONArray) jobj.get("content");
 
-                                int shop_id = temp.getInt("shop_id");
-                                String shop = temp.get("shop_name").toString();
-                                String laddr = temp.get("shop_address_lotnum").toString();
-                                String saddr = temp.get("shop_address_street").toString();
-                                String floor = temp.get("shop_floor").toString();
-                                String telno = temp.get("shop_tel_number").toString();
-                                String category = temp.get("shop_category").toString();
-                                String type = temp.get("shop_type").toString();
-                                String detail = temp.get("shop_details").toString();
-                                String homepg = temp.get("shop_homepage").toString();
-                                String introduct = temp.get("shop_introduct").toString();
-                                String lat = temp.get("shop_latitude").toString();
-                                String lng = temp.get("shop_longitude").toString();
+                                for (int i = 0; i < received.length(); i++) {
+                                    JSONObject temp = (JSONObject) received.get(i);
 
-                                Restaurant restmp = new Restaurant(shop_id, shop, laddr, saddr, floor, telno, category, type, detail, homepg, introduct, lat, lng);
+                                    int shop_id = temp.getInt("shop_id");
+                                    String shop = temp.get("shop_name").toString();
+                                    String laddr = temp.get("shop_address_lotnum").toString();
+                                    String saddr = temp.get("shop_address_street").toString();
+                                    String floor = temp.get("shop_floor").toString();
+                                    String telno = temp.get("shop_tel_number").toString();
+                                    String category = temp.get("shop_category").toString();
+                                    String type = temp.get("shop_type").toString();
+                                    String detail = temp.get("shop_details").toString();
+                                    String homepg = temp.get("shop_homepage").toString();
+                                    String introduct = temp.get("shop_introduct").toString();
+                                    String lat = temp.get("shop_latitude").toString();
+                                    String lng = temp.get("shop_longitude").toString();
 
-                                LatLng latlngtmp = restmp.getLatlng();
+                                    Restaurant restmp = new Restaurant(shop_id, shop, laddr, saddr, floor, telno, category, type, detail, homepg, introduct, lat, lng);
 
-                                Marker mktmp = mMap.addMarker(new MarkerOptions()
-                                        .position(latlngtmp)
-                                        .icon(BitmapDescriptorFactory
-                                                .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                                        .title(restmp.getShopname()));
+                                    LatLng latlngtmp = restmp.getLatlng();
+
+                                    Marker mktmp = mMap.addMarker(new MarkerOptions()
+                                            .position(latlngtmp)
+                                            .icon(BitmapDescriptorFactory
+                                                    .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                                            .title(restmp.getShopname()));
 
 
-                                reslist.add(restmp);
-                                mk.add(mktmp);
-                                listarr.add(reslist.get(reslist.size() - 1).getShopname());
-                                mk.get(mk.size() - 1).showInfoWindow();
+                                    reslist.add(restmp);
+                                    mk.add(mktmp);
+                                    listarr.add(reslist.get(reslist.size() - 1).getShopname());
+                                    mk.get(mk.size() - 1).showInfoWindow();
+                                }
+
+                                for (int i = 0; i < reslist.size(); i++) {
+                                    Log.i("레스토랑", reslist.get(i).getShopname());
+                                    Log.i("리스트뷰", listarr.get(i).toString());
+                                }
+                                Log.i("레스토랑 갯수", Integer.toString(reslist.size()));
+                                Log.i("마커 갯수", Integer.toString(mk.size()));
+
+                                mapadapter = new ArrayAdapter(MapFind.this, android.R.layout.simple_list_item_1, listarr);
+                                mapList.setAdapter(mapadapter);
+
+
                             }
-
-                            for (int i = 0; i < reslist.size(); i++) {
-                                Log.i("레스토랑", reslist.get(i).getShopname());
-                                Log.i("리스트뷰", listarr.get(i).toString());
-                            }
-                            Log.i("레스토랑 갯수", Integer.toString(reslist.size()));
-                            Log.i("마커 갯수", Integer.toString(mk.size()));
-
-                            mapadapter = new ArrayAdapter(MapFind.this, android.R.layout.simple_list_item_1, listarr);
-                            mapList.setAdapter(mapadapter);
-
-
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "MESSAGE_TYPE_WRONG", Toast.LENGTH_SHORT).show();
@@ -245,7 +248,7 @@ public class MapFind extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
+        //setUpMapIfNeeded();
     }
 
     /**

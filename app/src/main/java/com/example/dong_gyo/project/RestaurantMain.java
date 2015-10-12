@@ -64,7 +64,7 @@ public class RestaurantMain extends ActionBarActivity {
     ButtonClickListener buttonClickListener;
     LayoutListener layoutListener;
 
-    ArrayList<Review> reviews = new ArrayList<Review>();
+    ArrayList<Review> reviews;
     ReviewAdapter revadap;
 
     private int REVIEW_REGISTER =1;
@@ -110,7 +110,6 @@ public class RestaurantMain extends ActionBarActivity {
 
             else if( msg.what  == GET_RESTAURANT_REVIEW){
                 //review를 받아올 때
-
                 try {
                     JSONObject jobj = new JSONObject(msg.obj + "");
                     if(jobj.get("messagetype").equals("searchshopreview")) {
@@ -125,6 +124,8 @@ public class RestaurantMain extends ActionBarActivity {
 
                             if( jobj.get("content").toString().equals("review_exist")){
                                 Toast.makeText(getApplicationContext(), "REVIEW_ONE_MORE", Toast.LENGTH_SHORT).show();
+
+                                reviews = new ArrayList<Review>();
 
                                 received_review_arr = (JSONArray) jobj.get("review_arr");
                                 //리뷰들 받아오기
@@ -145,10 +146,8 @@ public class RestaurantMain extends ActionBarActivity {
 
                                 }
 
-
                                 revadap = new ReviewAdapter(RestaurantMain.this, R.layout.review_shower, reviews);
                                 reviewlist.setAdapter(revadap);
-
 
                             }
                             else if ( jobj.get("content").toString().equals("review_no_exist")){
@@ -162,7 +161,6 @@ public class RestaurantMain extends ActionBarActivity {
                     e.printStackTrace();
                 }
             }
-
         }
     };
 
