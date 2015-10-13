@@ -75,9 +75,8 @@ public class RestaurantMain extends ActionBarActivity {
     ArrayList pathStrArr  =  new ArrayList<String>();
 
     JSONArray received_review_arr = new JSONArray();
-    JSONArray received_picture_str = new JSONArray();
-    JSONArray received_picture_arr = new JSONArray();
-    JSONArray received_picture_iter = new JSONArray();
+    JSONArray received_picture_str_iter = new JSONArray();
+    JSONArray received_picture_base64_string = new JSONArray();
 
     protected Handler mHandler =  new Handler() {
 
@@ -123,28 +122,54 @@ public class RestaurantMain extends ActionBarActivity {
                         else if(jobj.get("result").equals("SEARCH_SHOP_REVIEW_SUCCESS")) {
 
                             if( jobj.get("content").toString().equals("review_exist")){
-                                Toast.makeText(getApplicationContext(), "REVIEW_ONE_MORE", Toast.LENGTH_SHORT).show();
 
                                 reviews = new ArrayList<Review>();
 
                                 received_review_arr = (JSONArray) jobj.get("review_arr");
                                 //리뷰들 받아오기
-                                received_picture_str = (JSONArray) jobj.get("picture_str");
+                                received_picture_str_iter = (JSONArray) jobj.get("picture_str_iter");
                                 //리뷰의 그림들 받아오기
+                                received_picture_base64_string = (JSONArray) jobj.get("picture_base64_string");
+
+
 
                                 for(int i = 0 ; i < received_review_arr.length(); i++){
 
                                     //리뷰 정보 가져오기
                                     JSONObject temp = new JSONObject(received_review_arr.get(i).toString());
 
-                                    String reviewnum = temp.get("review_num").toString();
+                                    int reviewnum = temp.getInt("review_num");
                                     String user_id = temp.get("user_id").toString();
                                     String content = temp.get("content").toString();
                                     String date = temp.get("registered_date").toString();
 
-                                    reviews.add(new Review(user_id, content));
+                                    int count = 0;
+                                    int tempnow = -1;
+                                    for(int j = 0; j < received_picture_str_iter.length(); j++){
 
+                                        int picture_iter = Integer.parseInt(received_picture_str_iter.get(j).toString());
+
+                                        if(reviewnum == picture_iter && count > 0){
+                                            if(tempnow != reviewnum){
+                                                count = 0;
+                                            }
+                                            else{
+                                                count++;
+                                            }
+                                        } else if(reviewnum == picture_iter && count == 0){
+
+                                            String picture_base64_str = received_picture_base64_string.get(j).toString();
+                                            reviews.add(new Review(user_id, content, picture_base64_str));
+                                            count++;
+                                            tempnow= reviewnum;
+                                        }
+
+                                    }
                                 }
+
+                                Toast.makeText(getApplicationContext(), "REVIEW_ONE_MORE", Toast.LENGTH_SHORT).show();
+
+                                Log.i("size", Integer.toString(reviews.size()) + "개의 리뷰");
 
                                 revadap = new ReviewAdapter(RestaurantMain.this, R.layout.review_shower, reviews);
                                 reviewlist.setAdapter(revadap);
@@ -284,26 +309,6 @@ public class RestaurantMain extends ActionBarActivity {
         imagebut = (Button)findViewById(R.id.imagebut);
         imagebut.setOnClickListener(buttonClickListener);
 
-        /*
-        for(int i = 0 ; i< received_review_arr.length(); i++){
-            //여기에 이제 review 등록
-            try {
-
-                JSONObject temp = new JSONObject(received_review_arr.get(i).toString());
-
-                System.out.println(temp.get("review_num").toString());
-                System.out.println(temp.get("user_id").toString());
-                System.out.println(temp.get("content").toString());
-                System.out.println(temp.get("registered_date").toString());
-
-            } catch (JSONException e) {
-
-                e.printStackTrace();
-            }
-
-
-        }
-        */
 
     }
 
@@ -325,6 +330,8 @@ public class RestaurantMain extends ActionBarActivity {
 
                 for (int i = 0; i < clipData.getItemCount(); i++) {
                     Uri image = clipData.getItemAt(i).getUri();
+
+
                     pathStrArr.add(getImageNameToUri(image));
 
                     try {

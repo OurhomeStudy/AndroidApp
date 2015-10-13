@@ -8,8 +8,8 @@
     <!-- 유저 프로필 이미지 -->
     <ImageView
         android:id="@+id/reviewimg"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_margin="10dp"
         android:background="#E44044" />
     <!-- /유저 프로필 이미지 -->
@@ -25,7 +25,7 @@
             android:id="@+id/reviewid"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="13dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             android:textColor="#666666" />
         <TextView
@@ -33,7 +33,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:textSize="11dp"
+            android:textSize="20dp"
             android:textColor="#666666" />
     </LinearLayout>
     <!-- /유저 스크린네임, 텍스트 -->
