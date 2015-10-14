@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -24,27 +26,15 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import org.apache.http.HttpVersion;
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.protocol.HTTP;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-import Items.sslManager;
+import Items.RestaurantListAsync;
+import Items.StaticVariable;
 
 public class CustomerLogin extends Activity {
 
@@ -52,6 +42,47 @@ public class CustomerLogin extends Activity {
     CallbackManager callbackManager;
     AccessToken accesstoken;
     AccessTokenTracker accessTokenTracker;
+    JSONObject fb_userinfo;
+
+    private int SEND_FB_USERINFO = 1;
+
+    protected Handler mHandler =  new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == -1) {
+                System.out.println("handler error");
+            } else if (msg.what == SEND_FB_USERINFO) {
+                try {
+                    JSONObject jobj = new JSONObject(msg.obj + "");
+                    if(jobj.get("messagetype").equals("send_fb_userinfo")) {
+
+                        if(jobj.get("result").equals("SEND_FB_USERINFO_ERROR")) {
+                            Toast.makeText(getApplicationContext(), "SEND_FB_USERINFO_ERROR", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(jobj.get("result").equals("SEND_FB_USERINFO_FAIL")) {
+                            Toast.makeText(getApplicationContext(), "SEND_FB_USERINFO_FAIL", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(jobj.get("result").equals("SEND_FB_USERINFO_SUCCESS")) {
+
+                            Toast.makeText(getApplicationContext(), "SEND_FB_USERINFO_SUCCESS", Toast.LENGTH_SHORT).show();
+
+                            //니가 하고 싶은거
+
+                            //intent
+
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "MESSAGE_TYPE_WRONG", Toast.LENGTH_SHORT).show();
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +124,19 @@ public class CustomerLogin extends Activity {
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
-                                Log.d("user 정보 : ", response.getJSONObject().toString());
+
+                                JSONObject sending = new JSONObject();
+                                fb_userinfo = response.getJSONObject();
+
+                                try {
+                                    sending.put("messagetype", "send_fb_userinfo");
+                                    sending.put("content", fb_userinfo.toString());
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                new RestaurantListAsync(CustomerLogin.this, StaticVariable.getConnectUrl(), mHandler, sending, SEND_FB_USERINFO, 0);
                                 /*if (response != null) {
                                     try {
                                         JSONObject data = response.getJSONObject();
@@ -201,67 +244,5 @@ public class CustomerLogin extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    class LoginAsync extends AsyncTask<Void, Void, Void> {
-
-        JSONObject logininfo;
-
-        public LoginAsync(JSONObject rInfo){
-            logininfo = rInfo;
-        }
-
-        @Override
-        public void onPreExecute() {
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // TODO Auto-generated method stub
-
-            HttpClient httpClient = getHttpClient();
-
-            return null;
-        }
-
-        protected void onPostExecute(Void result) {
-            /*
-            sock.closeSocket();
-
-            Intent LocalSearchActivity = new Intent(MainActivity.this,
-                    LocalSearchActivity.class);
-
-            LocalSearchActivity.putExtra("localGu", localGu);
-            LocalSearchActivity.putExtra("localDong", localDong);
-
-            startActivity(LocalSearchActivity);*/
-
-            super.onPostExecute(result);
-        }
-
-        private HttpClient getHttpClient() {
-            try {
-                KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-                trustStore.load(null, null);
-
-                SSLSocketFactory sf = new sslManager(trustStore);
-                sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-
-                HttpParams params = new BasicHttpParams();
-                HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-                HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-
-                SchemeRegistry registry = new SchemeRegistry();
-                registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-                registry.register(new Scheme("https", sf, 15443));
-
-                ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
-
-                return new DefaultHttpClient(ccm, params);
-            } catch (Exception e) {
-                return new DefaultHttpClient();
-            }
-        }
     }
 }
