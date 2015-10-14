@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -23,11 +24,27 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.apache.http.HttpVersion;
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
+import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+
+import Items.sslManager;
 
 public class CustomerLogin extends Activity {
 
@@ -77,7 +94,7 @@ public class CustomerLogin extends Activity {
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
                                 Log.d("user 정보 : ", response.getJSONObject().toString());
-                                if (response != null) {
+                                /*if (response != null) {
                                     try {
                                         JSONObject data = response.getJSONObject();
                                         if (data.has("picture")) {
@@ -88,7 +105,7 @@ public class CustomerLogin extends Activity {
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
-                                }
+                                }*/
                             }
                         }
                 );
@@ -106,7 +123,7 @@ public class CustomerLogin extends Activity {
                         });
                 */
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender,birthday,picture");
+                parameters.putString("fields", "id,name,email,gender,birthday");
                 request.setParameters(parameters);
                 request.executeAsync();
 
@@ -184,5 +201,67 @@ public class CustomerLogin extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class LoginAsync extends AsyncTask<Void, Void, Void> {
+
+        JSONObject logininfo;
+
+        public LoginAsync(JSONObject rInfo){
+            logininfo = rInfo;
+        }
+
+        @Override
+        public void onPreExecute() {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+
+            HttpClient httpClient = getHttpClient();
+
+            return null;
+        }
+
+        protected void onPostExecute(Void result) {
+            /*
+            sock.closeSocket();
+
+            Intent LocalSearchActivity = new Intent(MainActivity.this,
+                    LocalSearchActivity.class);
+
+            LocalSearchActivity.putExtra("localGu", localGu);
+            LocalSearchActivity.putExtra("localDong", localDong);
+
+            startActivity(LocalSearchActivity);*/
+
+            super.onPostExecute(result);
+        }
+
+        private HttpClient getHttpClient() {
+            try {
+                KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                trustStore.load(null, null);
+
+                SSLSocketFactory sf = new sslManager(trustStore);
+                sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+
+                HttpParams params = new BasicHttpParams();
+                HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+                HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+
+                SchemeRegistry registry = new SchemeRegistry();
+                registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+                registry.register(new Scheme("https", sf, 15443));
+
+                ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
+
+                return new DefaultHttpClient(ccm, params);
+            } catch (Exception e) {
+                return new DefaultHttpClient();
+            }
+        }
     }
 }

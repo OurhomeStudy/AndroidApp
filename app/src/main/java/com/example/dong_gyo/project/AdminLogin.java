@@ -153,7 +153,7 @@ public class AdminLogin extends Activity {
                         }
 
 
-                        new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, sending, ADMIN_ID_PW_CHECK, 0);
+                        new RestaurantListAsync(AdminLogin.this, StaticVariable.getConnectUrl(), mHandler, sending, ADMIN_ID_PW_CHECK, 0);
 
                     }
                     break;
