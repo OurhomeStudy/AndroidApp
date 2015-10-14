@@ -12,8 +12,6 @@ public class StaticVariable {
 
     private static String connectUrl = "https://220.72.126.199:15443/";
 
-
-
     public static boolean isUserLogined() {
         return userLogined;
     }

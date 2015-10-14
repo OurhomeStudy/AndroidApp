@@ -281,7 +281,7 @@ public class AdminRegister  extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, sending, ADMIN_ID_DUPLICATE_CHECK, 0);
+                        new RestaurantListAsync(AdminRegister.this, StaticVariable.getConnectUrl(), mHandler, sending, ADMIN_ID_DUPLICATE_CHECK, 0);
                     }
                     break;
                 case R.id.register_shop_name_search_button:
@@ -301,7 +301,7 @@ public class AdminRegister  extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, sending, ADMIN_SHOP_NAME_SEARCH, 0);
+                        new RestaurantListAsync(AdminRegister.this, StaticVariable.getConnectUrl(), mHandler, sending, ADMIN_SHOP_NAME_SEARCH, 0);
                     }
 
                     break;

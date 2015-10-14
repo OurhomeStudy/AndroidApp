@@ -1,5 +1,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/reviewshower"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:minHeight="60dp"
@@ -8,8 +9,8 @@
     <!-- 유저 프로필 이미지 -->
     <ImageView
         android:id="@+id/reviewimg"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_margin="10dp"
         android:background="#E44044" />
     <!-- /유저 프로필 이미지 -->

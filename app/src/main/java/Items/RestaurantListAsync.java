@@ -1,5 +1,7 @@
 package Items;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -53,6 +55,9 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
     Context mContext;
     JSONObject _jobj;
 
+    ProgressDialog dialog; // ProgressDialog 참조변수
+    int pos_dilaog = 0; // ProgressDialog의 진행 위치
+
 
     public RestaurantListAsync(Context context, String urls, Handler handler,
                                JSONObject jobj, int hnum, int Data) {
@@ -69,24 +74,52 @@ public class RestaurantListAsync extends AsyncTask <Void, Void, String> {
     }
 
     @Override
-    public void onPreExecute() {
+    protected void onProgressUpdate(Void... values) {
+        // TODO Auto-generated method stub
+        super.onProgressUpdate(values);
 
+    }
+
+    @Override
+    public void onPreExecute() {
+        super.onPreExecute();
+
+
+
+        dialog = new ProgressDialog( ((Activity) mContext)); // ProgressDialog 객체
+        // 생성
+        // dialog.setTitle("Progress"); // ProgressDialog 제목
+        dialog.setMessage("로딩중..."); // ProgressDialog 메세지
+        // ProgressDialog
+        // 스타일
+        // 설정
+        dialog.setCanceledOnTouchOutside(false);
+        // ProgressDialog가 진행되는 동안 dialog의 바깥쪽을 눌러 종료하는 것을 금지
+
+        dialog.show(); // ProgressDialog 보여주기
     }
 
     @Override
     protected String doInBackground(Void... urls) {
 
+        publishProgress();
+        pos_dilaog = 0;
         return Task(_url,_jobj);
     }
 
     @Override
     protected void onPostExecute(String responseData) {
 
+        dialog.dismiss(); // ProgressDialog 보이지 않게 하기
+        dialog = null; // 참조변수 초기화
+
         Message msg = mhandler.obtainMessage();
         msg.what = handlernum;
         msg.obj = responseString;
         msg.arg1 = DataContent;
         mhandler.sendMessage(msg);
+
+
 
     }
 

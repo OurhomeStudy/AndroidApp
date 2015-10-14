@@ -456,7 +456,8 @@ public class MapFind extends ActionBarActivity {
                             sending.put("sendLeft", Double.toString(center_longitude - LONGDISTANCE));
                             sending.put("sendRight", Double.toString(center_longitude + LONGDISTANCE));
 
-                            new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, sending, GET_RESTAURANT_LIST, 0);
+                            new RestaurantListAsync(MapFind.this , StaticVariable.getConnectUrl(), mHandler, sending, GET_RESTAURANT_LIST, 0);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

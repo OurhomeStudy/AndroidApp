@@ -156,7 +156,8 @@ public class RestaurantMain extends ActionBarActivity {
                                             else{
                                                 count++;
                                             }
-                                        } else if(reviewnum == picture_iter && count == 0){
+                                        }
+                                        if(reviewnum == picture_iter && count == 0){
 
                                             String picture_base64_str = received_picture_base64_string.get(j).toString();
                                             reviews.add(new Review(user_id, content, picture_base64_str));
@@ -170,6 +171,10 @@ public class RestaurantMain extends ActionBarActivity {
                                 Toast.makeText(getApplicationContext(), "REVIEW_ONE_MORE", Toast.LENGTH_SHORT).show();
 
                                 Log.i("size", Integer.toString(reviews.size()) + "개의 리뷰");
+
+                                for(int i=0; i<reviews.size(); i++) {
+                                    Log.i("size", reviews.get(i).getName() + " " + reviews.get(i).getContent());
+                                }
 
                                 revadap = new ReviewAdapter(RestaurantMain.this, R.layout.review_shower, reviews);
                                 reviewlist.setAdapter(revadap);
@@ -291,15 +296,12 @@ public class RestaurantMain extends ActionBarActivity {
                         e.printStackTrace();
                     }
 
-                    new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, get_review_sending, GET_RESTAURANT_REVIEW, 0);
-
-
-
-
+                    new RestaurantListAsync(RestaurantMain.this, StaticVariable.getConnectUrl(), mHandler, get_review_sending, GET_RESTAURANT_REVIEW, 0);
                 }
-
             }
         });
+
+        LinearLayout tmp = (LinearLayout)findViewById(R.id.reviewshower);
 
         revadap = new ReviewAdapter(this, R.layout.review_shower, reviews);
         reviewlist = (ListView)findViewById(R.id.reviewlist);
@@ -380,7 +382,7 @@ public class RestaurantMain extends ActionBarActivity {
                     if (it != null) startActivity(it);
                     break;
                 case R.id.phonecall :
-                    Uri phoneNum = Uri.parse("tel:"+restaurant.getTelno().toString());
+                    Uri phoneNum = Uri.parse("tel:" + restaurant.getTelno().toString());
                     it = new Intent(Intent.ACTION_DIAL, phoneNum);
                     if (it != null) startActivity(it);
                     break;
@@ -442,15 +444,13 @@ public class RestaurantMain extends ActionBarActivity {
                                 }
                             }
                             registerReview.put("pathArr", pathArr);
-
                             Log.i("성공!!", registerReview.toString());
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, registerReview, REVIEW_REGISTER, 0);
+                        new RestaurantListAsync(RestaurantMain.this, StaticVariable.getConnectUrl(), mHandler, registerReview, REVIEW_REGISTER, 0);
                     }
-
 
                     break;
 
