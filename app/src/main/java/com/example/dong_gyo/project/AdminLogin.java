@@ -18,6 +18,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import Items.RestaurantListAsync;
+import Items.StaticVariable;
 
 /**
  * Created by cho on 2015-09-17.
@@ -152,7 +153,7 @@ public class AdminLogin extends Activity {
                         }
 
 
-                        new RestaurantListAsync(getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, ADMIN_ID_PW_CHECK, 0);
+                        new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, sending, ADMIN_ID_PW_CHECK, 0);
 
                     }
                     break;

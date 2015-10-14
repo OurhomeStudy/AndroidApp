@@ -19,6 +19,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import Items.RestaurantListAsync;
+import Items.StaticVariable;
 
 /**
  * Created by cho on 2015-09-20.
@@ -280,7 +281,7 @@ public class AdminRegister  extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        new RestaurantListAsync(getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, ADMIN_ID_DUPLICATE_CHECK, 0);
+                        new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, sending, ADMIN_ID_DUPLICATE_CHECK, 0);
                     }
                     break;
                 case R.id.register_shop_name_search_button:
@@ -300,7 +301,7 @@ public class AdminRegister  extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        new RestaurantListAsync(getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, ADMIN_SHOP_NAME_SEARCH, 0);
+                        new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, sending, ADMIN_SHOP_NAME_SEARCH, 0);
                     }
 
                     break;

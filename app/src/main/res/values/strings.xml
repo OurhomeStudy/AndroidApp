@@ -1,10 +1,13 @@
 <resources>
-    <string name="app_name">Project</string>
+    <string name="app_name">Project22</string>
     <string name="mapfind">지도검색</string>
     <string name="catfind">카테고리검색</string>
     <string name="start">메인화면</string>
     <string name="action_search">검색</string>
     <string name="search">검색하기</string>
+
+    <string name="facebook_app_id">476143679215594</string>
+    <string name="title_activity_cutomer_login">CutomerLogin</string>
 
     <!-- 네비게이션 드로우 -->
 

@@ -8,24 +8,21 @@ public class Review {
     private String name;
     private String content;
     private int reviewstar;
+    private String image;
 
-    public Review(String name, String content, int reviewstar) {
+    public Review(String name, String content, String image) {
         this.name = name;
         this.content = content;
-        this.reviewstar = reviewstar;
+        this.image = image;
     }
+
+    public void setImage (String image) { this.image = image; }
 
     public void setName (String name) {
         this.name = name;
     }
 
-    public void setContent (String content) {
-        this.content = content;
-    }
-
-    public void setReviewstar (int reviewstar) {
-        this.reviewstar = reviewstar;
-    }
+    public void setContent (String content) { this.content = content; }
 
     public String getName () {
         return name;
@@ -35,7 +32,6 @@ public class Review {
         return content;
     }
 
-    public int getReviewstar() {
-        return reviewstar;
-    }
+    public String getImage() { return image; }
+
 }

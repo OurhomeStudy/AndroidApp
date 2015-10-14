@@ -1,10 +1,14 @@
 package Customize;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dong_gyo.project.R;
@@ -51,10 +55,24 @@ public class ReviewAdapter extends BaseAdapter {
             convertView = inflater.inflate(layout, parent, false);
 
             TextView userid = (TextView)convertView.findViewById(R.id.reviewid);
-            TextView reviewtext = (TextView)convertView.findViewById(R.id.reviewtext);
+            TextView reviewtext = (TextView)convertView.findViewById(R.id.reviewcontent);
+            ImageView imgview = (ImageView)convertView.findViewById(R.id.reviewimg);
 
             userid.setText(reviews.get(position).getName());
             reviewtext.setText(reviews.get(position).getContent());
+
+            byte[] decodedBytes = Base64.decode(reviews.get(position).getImage(), Base64.DEFAULT);
+            Bitmap bmp = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+
+            int height = bmp.getHeight();
+            int width = bmp.getWidth();
+
+            Bitmap resized = null;
+            resized = Bitmap.createScaledBitmap(bmp, width/2, height/2, true);
+
+
+            imgview.setImageBitmap(resized);
+
         }
         return convertView;
     }

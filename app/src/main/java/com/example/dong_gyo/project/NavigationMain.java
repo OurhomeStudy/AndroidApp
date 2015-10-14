@@ -1,6 +1,5 @@
 package com.example.dong_gyo.project;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -21,10 +20,9 @@ public class NavigationMain extends AppCompatActivity implements NavigationDrawe
     private CharSequence mTitle;
 
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigationdrawer_main);
-
-        startActivity(new Intent(this, LoadingApp.class));
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);   //fragment에 접근
@@ -34,7 +32,6 @@ public class NavigationMain extends AppCompatActivity implements NavigationDrawe
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
     }
 
     public void onSectionAttached(int number) {

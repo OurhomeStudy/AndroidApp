@@ -43,10 +43,14 @@ import java.util.ArrayList;
 
 import Items.Restaurant;
 import Items.RestaurantListAsync;
+import Items.StaticVariable;
 
 public class MapFind extends ActionBarActivity {
 
     private int GET_RESTAURANT_LIST = 1;
+
+
+    private int clickedFlag= -1;
 
     GoogleMap mMap; // Might be null if Google Play services APK is not available.
     LocationManager lm;
@@ -80,7 +84,6 @@ public class MapFind extends ActionBarActivity {
             } else if (msg.what == GET_RESTAURANT_LIST) {
 
                 try {
-
                     JSONObject jobj = new JSONObject(msg.obj + "");
                     if (jobj.get("messagetype").equals("searchLocalRestaurant")) {
 
@@ -100,58 +103,56 @@ public class MapFind extends ActionBarActivity {
                             mk = new ArrayList<Marker>();
                             listarr = new ArrayList();
 
-                            JSONArray received = (JSONArray) jobj.get("content");
+                            if(!jobj.get("content").toString().equals("")) {
 
-                            for (int i = 0; i < received.length(); i++) {
-                                JSONObject temp = (JSONObject) received.get(i);
+                                JSONArray received = (JSONArray) jobj.get("content");
 
-                                String shop = temp.get("shop_name").toString();
-                                String laddr = temp.get("shop_address_lotnum").toString();
-                                String saddr = temp.get("shop_address_street").toString();
-                                String floor = temp.get("shop_floor").toString();
-                                String telno = temp.get("shop_tel_number").toString();
-                                String category = temp.get("shop_category").toString();
-                                String type = temp.get("shop_type").toString();
-                                String detail = temp.get("shop_details").toString();
-                                String homepg = temp.get("shop_homepage").toString();
-                                String introduct = temp.get("shop_introduct").toString();
-                                String lat = temp.get("shop_latitude").toString();
-                                String lng = temp.get("shop_longitude").toString();
+                                for (int i = 0; i < received.length(); i++) {
+                                    JSONObject temp = (JSONObject) received.get(i);
 
-                                Restaurant restmp = new Restaurant(shop, laddr, saddr, floor, telno, category, type, detail, homepg, introduct, lat, lng);
+                                    int shop_id = temp.getInt("shop_id");
+                                    String shop = temp.get("shop_name").toString();
+                                    String laddr = temp.get("shop_address_lotnum").toString();
+                                    String saddr = temp.get("shop_address_street").toString();
+                                    String floor = temp.get("shop_floor").toString();
+                                    String telno = temp.get("shop_tel_number").toString();
+                                    String category = temp.get("shop_category").toString();
+                                    String type = temp.get("shop_type").toString();
+                                    String detail = temp.get("shop_details").toString();
+                                    String homepg = temp.get("shop_homepage").toString();
+                                    String introduct = temp.get("shop_introduct").toString();
+                                    String lat = temp.get("shop_latitude").toString();
+                                    String lng = temp.get("shop_longitude").toString();
 
-                                LatLng latlngtmp = restmp.getLatlng();
+                                    Restaurant restmp = new Restaurant(shop_id, shop, laddr, saddr, floor, telno, category, type, detail, homepg, introduct, lat, lng);
 
-                                Marker mktmp = mMap.addMarker(new MarkerOptions()
-                                        .position(latlngtmp)
-                                        .icon(BitmapDescriptorFactory
-                                                .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                                        .title(restmp.getShopname()));
+                                    LatLng latlngtmp = restmp.getLatlng();
+
+                                    Marker mktmp = mMap.addMarker(new MarkerOptions()
+                                            .position(latlngtmp)
+                                            .icon(BitmapDescriptorFactory
+                                                    .defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                                            .title(restmp.getShopname()));
 
 
-                                reslist.add(restmp);
-                                mk.add(mktmp);
-                                listarr.add(reslist.get(reslist.size() - 1).getShopname());
-                                mk.get(mk.size() - 1).showInfoWindow();
+                                    reslist.add(restmp);
+                                    mk.add(mktmp);
+                                    listarr.add(reslist.get(reslist.size() - 1).getShopname());
+                                    mk.get(mk.size() - 1).showInfoWindow();
+                                }
+
+                                for (int i = 0; i < reslist.size(); i++) {
+                                    Log.i("레스토랑", reslist.get(i).getShopname());
+                                    Log.i("리스트뷰", listarr.get(i).toString());
+                                }
+                                Log.i("레스토랑 갯수", Integer.toString(reslist.size()));
+                                Log.i("마커 갯수", Integer.toString(mk.size()));
+
+                                mapadapter = new ArrayAdapter(MapFind.this, android.R.layout.simple_list_item_1, listarr);
+                                mapList.setAdapter(mapadapter);
+
+
                             }
-
-                            for (int i = 0; i < reslist.size(); i++) {
-                                Log.i("레스토랑", reslist.get(i).getShopname());
-                                Log.i("리스트뷰", listarr.get(i).toString());
-                            }
-                            Log.i("레스토랑 갯수", Integer.toString(reslist.size()));
-                            Log.i("마커 갯수", Integer.toString(mk.size()));
-
-                            mapadapter = new ArrayAdapter(MapFind.this, android.R.layout.simple_list_item_1, listarr);
-                            mapList.setAdapter(mapadapter);
-
-                            /*
-                            JSONObject index0 = (JSONObject)received.get(0);
-                            System.out.println("received 갯수 : "+received.length());
-                            System.out.println("첫번째 집 이름 : "+index0.get("shop_name").toString());
-                            Toast.makeText(getApplicationContext(),index0.get("shop_name").toString(), Toast.LENGTH_SHORT).show();
-                            */
-
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "MESSAGE_TYPE_WRONG", Toast.LENGTH_SHORT).show();
@@ -160,18 +161,8 @@ public class MapFind extends ActionBarActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else if (msg.what == 3) {
-
-                try {
-                    JSONObject jobj = new JSONObject(msg.obj + "");
-                    if (jobj.get("messagetype").equals("temp2")) {
-                        Toast.makeText(getApplicationContext(), jobj.get("content").toString(), Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
+
 
         }
     };
@@ -194,6 +185,9 @@ public class MapFind extends ActionBarActivity {
         mapListbut = (Button) findViewById(R.id.showMapList);
         mapSearchbut = (Button) findViewById(R.id.findShop);
 
+        mapListbut.setOnClickListener(btl);
+        mapSearchbut.setOnClickListener(btl);
+
         mapList = (ListView) findViewById(R.id.mapList);
         mapList.setVisibility(View.INVISIBLE);
 
@@ -201,35 +195,44 @@ public class MapFind extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //listview 클릭리스너
+                for (int i = 0; i < reslist.size(); i++) {
 
-                for (int i = 0; i < reslist.size(); i++)
                     if (mapList.getItemAtPosition(position).toString().equals(reslist.get(i).getShopname())) {
 
-                        JSONObject clickedRestaurant = new JSONObject();
-
-                        try {
-                            clickedRestaurant.put("shop_name", reslist.get(i).getShopname());
-                            clickedRestaurant.put("shop_address_lotnum", reslist.get(i).getLAddress());
-                            clickedRestaurant.put("shop_address_street", reslist.get(i).getSAdress());
-                            clickedRestaurant.put("shop_floor", reslist.get(i).getFloor());
-                            clickedRestaurant.put("shop_tel_number", reslist.get(i).getTelno());
-                            clickedRestaurant.put("shop_category", reslist.get(i).getCategory());
-                            clickedRestaurant.put("shop_type", reslist.get(i).getType());
-                            clickedRestaurant.put("shop_details", reslist.get(i).getDetail());
-                            clickedRestaurant.put("shop_homepage", reslist.get(i).getHomepg());
-                            clickedRestaurant.put("shop_introduct", reslist.get(i).getIntroduction());
-                            Log.i("성공!!", clickedRestaurant.toString());
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        Intent it = new Intent(MapFind.this, RestaurantMain.class);
-
-                        it.putExtra("content", clickedRestaurant.toString());
-
-                        startActivity(it);
+                        clickedFlag = i;
+                        break;
                     }
+                }
+
+                JSONObject clickedRestaurant = new JSONObject();
+                try {
+
+                    clickedRestaurant.put("shop_id", reslist.get(clickedFlag).getShopid());
+                    clickedRestaurant.put("shop_name", reslist.get(clickedFlag).getShopname());
+                    clickedRestaurant.put("shop_address_lotnum", reslist.get(clickedFlag).getLAddress());
+                    clickedRestaurant.put("shop_address_street", reslist.get(clickedFlag).getSAdress());
+                    clickedRestaurant.put("shop_floor", reslist.get(clickedFlag).getFloor());
+                    clickedRestaurant.put("shop_tel_number", reslist.get(clickedFlag).getTelno());
+                    clickedRestaurant.put("shop_category", reslist.get(clickedFlag).getCategory());
+                    clickedRestaurant.put("shop_type", reslist.get(clickedFlag).getType());
+                    clickedRestaurant.put("shop_details", reslist.get(clickedFlag).getDetail());
+                    clickedRestaurant.put("shop_homepage", reslist.get(clickedFlag).getHomepg());
+                    clickedRestaurant.put("shop_introduct", reslist.get(clickedFlag).getIntroduction());
+
+                    Log.i("성공!!", clickedRestaurant.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Intent it = new Intent(MapFind.this, RestaurantMain.class);
+
+                it.putExtra("content", clickedRestaurant.toString());
+
+                startActivity(it);
+
+
+
             }
         });
 
@@ -245,7 +248,7 @@ public class MapFind extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
+        //setUpMapIfNeeded();
     }
 
     /**
@@ -453,7 +456,7 @@ public class MapFind extends ActionBarActivity {
                             sending.put("sendLeft", Double.toString(center_longitude - LONGDISTANCE));
                             sending.put("sendRight", Double.toString(center_longitude + LONGDISTANCE));
 
-                            new RestaurantListAsync(getApplicationContext(), "https://183.96.25.221:15443/", mHandler, sending, GET_RESTAURANT_LIST, 0);
+                            new RestaurantListAsync(getApplicationContext(), StaticVariable.getConnectUrl(), mHandler, sending, GET_RESTAURANT_LIST, 0);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
