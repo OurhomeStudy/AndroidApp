@@ -20,7 +20,7 @@
     <fragment android:id="@+id/navigation_drawer"
         android:layout_width="@dimen/navigation_drawer_width" android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:name="Items.NavigationDrawerFragment"
+        android:name="com.example.dong_gyo.project.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer" />  <!-- 드로어에 표시될 뷰-->
 
 </android.support.v4.widget.DrawerLayout>

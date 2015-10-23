@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import Items.NavigationDrawerFragment;
-
 /**
  * Created by Dong_Gyo on 2015. 9. 13..
  */
@@ -32,6 +30,17 @@ public class NavigationMain extends AppCompatActivity implements NavigationDrawe
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+/*
+        //PreFer이란 이름의 자료를 불러들임
+        userSession = getSharedPreferences("UserSession", 0);
+        //pref에 불려진 자료를 수정할 수 있게 불러옴
+        SharedPreferences.Editor editor = userSession.edit();
+
+        editor.putString("UserId","NULL");
+        editor.putString("UserName","NULL");
+        editor.putBoolean("UserLogined",false);
+        //저장
+        editor.commit();*/
     }
 
     public void onSectionAttached(int number) {
@@ -54,7 +63,6 @@ public class NavigationMain extends AppCompatActivity implements NavigationDrawe
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,5 +101,4 @@ public class NavigationMain extends AppCompatActivity implements NavigationDrawe
 
         return super.onOptionsItemSelected(item);
     }
-
 }

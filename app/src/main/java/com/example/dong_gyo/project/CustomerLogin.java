@@ -33,6 +33,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import Items.GeneralPreferences;
 import Items.RestaurantListAsync;
 import Items.StaticVariable;
 
@@ -68,8 +69,23 @@ public class CustomerLogin extends Activity {
                             Toast.makeText(getApplicationContext(), "SEND_FB_USERINFO_SUCCESS", Toast.LENGTH_SHORT).show();
 
                             //니가 하고 싶은거
+                            StaticVariable.setUser_id(fb_userinfo.get("id").toString());
+                            StaticVariable.setUser_name(fb_userinfo.get("name").toString());
+                            StaticVariable.setUserLogined(true);
+
+                            //user Session 유지를 위해 preferences 사용
+                            GeneralPreferences userSession = new GeneralPreferences(CustomerLogin.this);
+                            userSession.putString("UserId", fb_userinfo.get("id").toString());
+                            userSession.putString("UserName", fb_userinfo.get("name").toString());
+                            userSession.putBoolean("UserLogined", true);
+
 
                             //intent
+                            Intent fb_login_success = new Intent(CustomerLogin.this,NavigationMain.class);
+                            fb_login_success.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);  //액티비티 스택제거
+                            fb_login_success.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(fb_login_success);
+
 
                         }
                     } else {
@@ -97,7 +113,7 @@ public class CustomerLogin extends Activity {
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.example.song.mappal",
+                    "com.example.dong_gyo.project",
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
@@ -169,17 +185,6 @@ public class CustomerLogin extends Activity {
                 parameters.putString("fields", "id,name,email,gender,birthday");
                 request.setParameters(parameters);
                 request.executeAsync();
-
-                //Log.d("Token",loginResult.getAccessToken().getToken().toString());
-                //Log.d("Token",loginResult.getAccessToken().getSource().toString());
-
-                /*
-                Intent intent_testActivity;
-                intent_testActivity = new Intent(CustomerLogin.this,
-                        testActivity.class);
-                intent_testActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);  //액티비티 스택제거
-                intent_testActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent_testActivity);*/
             }
 
             @Override
@@ -204,6 +209,18 @@ public class CustomerLogin extends Activity {
                 // Set the access token using
                 // currentAccessToken when it's loaded or set.
                 //Log.d("페북아이디",accesstoken.getUserId());
+                if(currentAccessToken==null){   //페이스북 로그아웃 시 세션처리
+                    GeneralPreferences userSession = new GeneralPreferences(CustomerLogin.this);
+                    userSession.putBoolean("UserLogined",false);
+
+                    Toast.makeText(getApplicationContext(), "페이스북 로그아웃", Toast.LENGTH_SHORT).show();
+
+                    Intent fb_logout_success = new Intent(CustomerLogin.this,NavigationMain.class);
+                    fb_logout_success.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);  //액티비티 스택제거
+                    fb_logout_success.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(fb_logout_success);
+                }
+
             }
         };
         // If the access token is available already assign it.
