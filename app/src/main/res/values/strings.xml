@@ -9,6 +9,8 @@
     <string name="facebook_app_id">476143679215594</string>
     <string name="title_activity_cutomer_login">CutomerLogin</string>
 
+    <string name="user_nonlogin_name">손님</string>
+
     <!-- 네비게이션 드로우 -->
 
     <string name="title_section1">Section 1</string>
